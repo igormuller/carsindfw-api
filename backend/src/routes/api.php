@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
+Route::post('teste', [UserController::class,'teste']);
 Route::post('new-company', 'CompanyController@start');
 Route::get('all-makes', 'CarMakeController@index');
 Route::get('search-makes', 'CarMakeController@searchMakes');

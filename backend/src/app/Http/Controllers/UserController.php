@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+
+    public function teste(Request $request)
+    {
+        dd("aqui");
+    }
     public function index()
     {
         return User::thisCompany()->get();
