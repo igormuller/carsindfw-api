@@ -26,6 +26,7 @@ class CompanyRepository
     public function getDetailShow(Company $company)
     {
         $entity = $this->getModelType($company);
+        $entity->type = $company->type;
         $data = $entity->load(
             [
                 'address',

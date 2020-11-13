@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class CityController extends Controller
 {
+    public function getCitiesByState($state_id)
+    {
+        return City::where('state_id', $state_id)->orderBy('name')->get();
+    }
+
     public function create(Request $request)
     {
         set_time_limit(0);

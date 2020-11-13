@@ -26,14 +26,18 @@ Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
 Route::middleware('auth:api')->group(function () {
 
     Route::get('users/info', 'UserController@info');
+    Route::get('cities/{state_id}', 'CityController@getCitiesByState');
+
     Route::resources(
         [
             'addresses'      => 'AddressController',
             'advertisements' => 'AdvertisementController',
+            'cities'         => 'CityController',
             'companies'      => 'CompanyController',
             'dealers'        => 'DealerController',
             'gallery'        => 'GalleryController',
             'people'         => 'PersonController',
+            'states'         => 'StateController',
             'users'          => 'UserController',
         ]
     );

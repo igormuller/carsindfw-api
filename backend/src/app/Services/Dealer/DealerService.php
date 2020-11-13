@@ -20,6 +20,16 @@ class DealerService
         return $this->repository->create($data);
     }
 
+    public function find(int $id) : Dealer
+    {
+        return $this->repository->findOrFail($id);
+    }
+
+    public function detailEdit(Dealer $dealer) : Dealer
+    {
+        return $dealer->load('address');
+    }
+
     public function detail(Dealer $dealer) : Dealer
     {
         return $dealer->load(
@@ -33,7 +43,8 @@ class DealerService
 
     public function allDealers()
     {
-        return $this->repository->all();
+        $dealers = $this->repository->all();
+        return $dealers->load('address', 'address.city', 'address.state');
     }
 
     public function allCities() : array

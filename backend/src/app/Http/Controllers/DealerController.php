@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dealer;
 use App\Services\Dealer\DealerService;
 use Illuminate\Http\Request;
 
@@ -14,12 +13,7 @@ class DealerController extends Controller
 
     public function index()
     {
-        $this->service->allDealers();
-    }
-
-    public function create()
-    {
-        //
+        return $this->service->allDealers();
     }
 
     public function store(Request $request)
@@ -29,12 +23,8 @@ class DealerController extends Controller
 
     public function show($id)
     {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
+        $dealer = $this->service->find($id);
+        return $this->service->detailEdit($dealer);
     }
 
     public function update(Request $request, $id)
@@ -59,7 +49,7 @@ class DealerController extends Controller
 
     public function dealerDetail($dealer_id)
     {
-        $dealer = Dealer::findOrFail($dealer_id);
+        $dealer = $this->service->find($dealer_id);
         return $this->service->detail($dealer);
     }
 }

@@ -47,7 +47,7 @@ class AdvertisementService
 
     public function dataToShow(Advertisement $entity) : Advertisement
     {
-        $data          = $this->repository->getEntityData($entity);
+        $data = $this->repository->getEntityData($entity);
 
         $companyService = new CompanyService();
         $data->company_data = $companyService->detail($entity->company);
