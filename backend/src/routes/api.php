@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 
-Route::post('teste', [UserController::class,'teste']);
+Route::get('teste', 'InterestController@testee');
 Route::post('new-company', 'CompanyController@start');
 Route::get('all-makes', 'CarMakeController@index');
 Route::get('search-makes', 'CarMakeController@searchMakes');
@@ -22,6 +21,7 @@ Route::get('dealers-city/{city_id}', 'DealerController@dealersByCity');
 Route::get('dealer/{dealer_id}', 'DealerController@dealerDetail');
 Route::get('search-zipcode/{number}', 'ZipcodeController@search');
 Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
+Route::post('register-interest', 'InterestController@register');
 
 Route::middleware('auth:api')->group(function () {
 
