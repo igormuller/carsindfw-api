@@ -7,6 +7,7 @@ use App\Models\Advertisement;
 use App\Repositories\AdvertisementRepository;
 use App\Services\Advertisement\AdvertisementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class AdvertisementController extends Controller
 {
@@ -36,10 +37,9 @@ class AdvertisementController extends Controller
         return $this->service->create($request->all());
     }
 
-    public function update(Request $request, Advertisement $advertisement)
+    public function update(StoreAdvertisement $request, Advertisement $advertisement)
     {
-        $advertisement->update($request->all());
-        return $advertisement;
+        return $this->service->update($advertisement, $request->all());
     }
 
     public function destroy($id)
@@ -63,5 +63,12 @@ class AdvertisementController extends Controller
         $advertisementsData = $this->service->collectionToShow(collect($advertisements->items()));
         $advertisements->data = $advertisementsData->toArray();
         return $advertisements;
+    }
+
+    public function vinCheck($vin_number)
+    {
+        $url = 'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinExtended/'.$vin_number.'?format=json';
+        $response = Http::get($url);
+        return $response->json();
     }
 }

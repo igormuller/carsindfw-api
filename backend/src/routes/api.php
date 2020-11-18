@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('teste', 'InterestController@testee');
+Route::get('check-vin/{vin_number}', 'AdvertisementController@vinCheck');
 Route::post('new-company', 'CompanyController@start');
 Route::get('all-makes', 'CarMakeController@index');
 Route::get('search-makes', 'CarMakeController@searchMakes');

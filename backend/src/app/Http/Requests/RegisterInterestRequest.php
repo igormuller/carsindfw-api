@@ -15,8 +15,8 @@ class RegisterInterestRequest extends FormRequest
     {
         return [
             'name'        => 'required',
-            'phone'       => 'required_without:email',
-            'email'       => 'required_without:phone',
+            'phone'       => 'required_without:email|max:20',
+            'email'       => 'required_without:phone|email',
             'copy'        => 'boolean',
             'description' => 'required',
         ];

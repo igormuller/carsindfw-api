@@ -19,6 +19,13 @@ class BaseRepository
         return $this->entity->create($data);
     }
 
+    public function update(Model $model, array $data): Model
+    {
+        $this->entity = $model;
+        $this->entity->update($data);
+        return $this->entity;
+    }
+
     public function findOrFail(int $id) :? Model
     {
         return $this->entity->findOrFail($id);

@@ -21,10 +21,26 @@ class AdvertisementService
     public function create(array $data) : Advertisement
     {
         $data['company_id'] = Auth::user()->company_id;
+        $data = $this->prepareData($data);
+        return $this->repository->create($data);
+    }
+
+    public function update(Advertisement $advertisement, array $data) : Advertisement
+    {
+        $data = $this->prepareData($data);
+        return $this->repository->update($advertisement, $data);
+    }
+
+    private function prepareData(array $data) : array
+    {
         if (!empty($data['features'])) {
             $data['features'] = implode(',', $data['features']);
         }
-        return $this->repository->create($data);
+
+        $data['value']      = str_replace(',', '', $data['value']);
+        $data['vin_number'] = strtoupper(str_replace(' ', '', $data['vin_number']));
+
+        return $data;
     }
 
     public function getLastCars() : Collection
