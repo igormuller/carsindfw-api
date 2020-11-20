@@ -29,7 +29,7 @@ class StoreAdvertisement extends FormRequest
             "engine"            => "required",
             "seats"             => "nullable|integer",
             "doors"             => "nullable|integer",
-            "vin_number"        => "required|min:19|max:19",
+            "vin_number"        => "required|min:17|max:19",
             "miles"             => "required",
             "features"          => "nullable",
             "value"             => "required",
