@@ -53,7 +53,7 @@ class DealerService
     public function detailEdit(Dealer $dealer) : Dealer
     {
         $storage = new StorageService();
-        $dealer->profile_url = $storage->getUrl($dealer->profile_path);
+        $dealer->profile_url = !empty($dealer->profile_path) ? $storage->getUrl($dealer->profile_path) : null;
         return $dealer->load('address');
     }
 
