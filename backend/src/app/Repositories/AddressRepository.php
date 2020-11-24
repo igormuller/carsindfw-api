@@ -4,17 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Address;
 
-class AddressRepository
+class AddressRepository extends BaseRepository
 {
     private $entity;
 
     public function __construct()
     {
         $this->entity = new Address();
-    }
-
-    public function create(Array $data): Address
-    {
-        return $this->entity->create($data);
     }
 }

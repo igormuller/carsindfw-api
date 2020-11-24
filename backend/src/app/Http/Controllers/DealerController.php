@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DealerRequest;
 use App\Services\Dealer\DealerService;
-use Illuminate\Http\Request;
 
 class DealerController extends Controller
 {
@@ -16,7 +16,7 @@ class DealerController extends Controller
         return $this->service->allDealers();
     }
 
-    public function store(Request $request)
+    public function store(DealerRequest $request)
     {
         //
     }
@@ -27,9 +27,12 @@ class DealerController extends Controller
         return $this->service->detailEdit($dealer);
     }
 
-    public function update(Request $request, $id)
+    public function update(DealerRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $dealer = $this->service->find($id);
+        $dealer = $this->service->update($dealer, $data);
+        return $this->service->detailEdit($dealer);
     }
 
     public function destroy($id)

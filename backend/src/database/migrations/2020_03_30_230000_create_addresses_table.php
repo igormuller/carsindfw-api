@@ -20,10 +20,10 @@ class CreateAddressesTable extends Migration
             $table->unsignedBigInteger('state_id')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
             $table->string('neighborhood', 100)->nullable();
-            $table->string('street')->nullable();
-            $table->string('number')->nullable();
-            $table->string('complements')->nullable();
-            $table->string('zipcode');
+            $table->string('street', 100)->nullable();
+            $table->string('number', 10)->nullable();
+            $table->string('complements', 100)->nullable();
+            $table->string('zipcode', 6);
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('state_id')->references('id')->on('states');
