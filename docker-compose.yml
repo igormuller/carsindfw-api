@@ -7,9 +7,9 @@ services:
     #    restart: always
     volumes:
       - ./backend/src:/var/www
-    environment:
-      - "XDEBUG_CONFIG=remote_host=localhost remote_port=9000 remote_enable=1 remote_autostart = 1"
-      - "PHP_IDE_CONFIG=serverName=xdebug-docker"
+#    environment:
+#      - "XDEBUG_CONFIG=remote_host=localhost remote_port=9000 remote_enable=1 remote_autostart = 1"
+#      - "PHP_IDE_CONFIG=serverName=xdebug-docker"
 
   carsindfw_nginx:
     container_name: carsindfw-nginx
