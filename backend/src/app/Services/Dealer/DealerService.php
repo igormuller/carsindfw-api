@@ -34,7 +34,7 @@ class DealerService
             $storage->delete($dealer->profile_path);
         }
 
-        if (!empty($data['profile_path']) && (!$data['profile_path'] !== $dealer->profile_path)) {
+        if (!empty($data['profile_path']) && ($data['profile_path'] !== $dealer->profile_path)) {
             if (!empty($dealer->profile_path)) {
                 $storage->delete($dealer->profile_path);
             }
