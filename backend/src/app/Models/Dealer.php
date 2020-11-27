@@ -45,6 +45,11 @@ class Dealer extends Model
         return $this->hasMany('App\Models\Advertisement','company_id','company_id');
     }
 
+    public function gallery()
+    {
+        return $this->hasMany("App\Models\GalleryDealer");
+    }
+
     //------------------------------//
     //          SCOPES              //
     //------------------------------//

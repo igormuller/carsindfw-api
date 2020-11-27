@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGaleryDealersTable extends Migration
+class CreateGalleryDealersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateGaleryDealersTable extends Migration
      */
     public function up()
     {
-        Schema::create('galery_dealers', function (Blueprint $table) {
+        Schema::create('gallery_dealers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dealer_id');
             $table->string('name', 50)->nullable();

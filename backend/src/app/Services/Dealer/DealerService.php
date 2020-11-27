@@ -6,6 +6,7 @@ use App\Models\Dealer;
 use App\Repositories\AddressRepository;
 use App\Repositories\DealerRepository;
 use App\Services\General\StorageService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DealerService
@@ -54,7 +55,17 @@ class DealerService
     {
         $storage = new StorageService();
         $dealer->profile_url = !empty($dealer->profile_path) ? $storage->getUrl($dealer->profile_path) : null;
+        $dealer->gallery = $this->getGalleryData($dealer);
         return $dealer->load('address');
+    }
+
+    public function getGalleryData(Dealer $entity) : Collection
+    {
+        $storage = new StorageService();
+        return $entity->gallery->map(function ($item) use ($storage) {
+            $item->url = $storage->getURL($item->path);
+            return $item;
+        });
     }
 
     public function detail(Dealer $dealer) : Dealer

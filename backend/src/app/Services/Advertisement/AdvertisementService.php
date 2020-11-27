@@ -5,7 +5,6 @@ namespace App\Services\Advertisement;
 use App\Models\Advertisement;
 use App\Repositories\AdvertisementRepository;
 use App\Services\Company\CompanyService;
-use App\Services\Dealer\DealerService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
