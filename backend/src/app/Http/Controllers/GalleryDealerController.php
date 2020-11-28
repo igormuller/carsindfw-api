@@ -19,6 +19,6 @@ class GalleryDealerController extends Controller
         $data = $request->all();
         $gallery->uploadGallery($data['gallery'], $dealer);
 
-        return $service->getGalleryData($dealer);
+        return $gallery->getGalleryData($dealer);
     }
 }
