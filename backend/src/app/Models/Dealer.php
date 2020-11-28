@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\CompanyTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Dealer extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CompanyTrait;
 
     protected $fillable = [
         'company_id',

@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('users/info', 'UserController@info');
     Route::get('cities/{state_id}', 'CityController@getCitiesByState');
+    Route::post('gallery-dealer/{dealer_id}', 'GalleryDealerController@store');
 
     Route::resources(
         [

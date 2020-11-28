@@ -8,6 +8,7 @@ use App\Repositories\DealerRepository;
 use App\Services\General\StorageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DealerService
 {
@@ -55,21 +56,15 @@ class DealerService
     {
         $storage = new StorageService();
         $dealer->profile_url = !empty($dealer->profile_path) ? $storage->getUrl($dealer->profile_path) : null;
-        $dealer->gallery = $this->getGalleryData($dealer);
-        return $dealer->load('address');
-    }
 
-    public function getGalleryData(Dealer $entity) : Collection
-    {
-        $storage = new StorageService();
-        return $entity->gallery->map(function ($item) use ($storage) {
-            $item->url = $storage->getURL($item->path);
-            return $item;
-        });
+        $gallery = new GalleryDealerService();
+        $dealer->gallery = $gallery->getGalleryData($dealer);
+        return $dealer->load('address');
     }
 
     public function detail(Dealer $dealer) : Dealer
     {
+        $dealer = $this->detailEdit($dealer);
         return $dealer->load(
             [
                 'address',
@@ -95,11 +90,14 @@ class DealerService
 
     public function dealersByCity(int $city_id) : array
     {
-        return DB::table('dealers')
+        $dealers = DB::table('dealers')
                  ->select('dealers.*', 'addresses.city_id', 'addresses.street', 'addresses.number')
                  ->join('addresses', 'addresses.company_id', '=', 'dealers.company_id')
                  ->where('addresses.city_id', $city_id)
-                 ->get()
-                 ->toArray();
+                 ->get();
+        $dealers->map(function ($item) {
+            $item->profile_url = !empty($item->profile_path) ? Storage::url($item->profile_path) : null;
+        });
+        return $dealers->toArray();
     }
 }
