@@ -10,14 +10,13 @@ class GalleryDealerController extends Controller
 {
     public function store(Request $request, $delaer_id)
     {
-        $request->validate(['gallery' => 'required|array']);
-
         $service = new DealerService();
         $dealer = $service->find($delaer_id);
 
         $gallery = new GalleryDealerService();
         $data = $request->all();
-        $gallery->uploadGallery($data['gallery'], $dealer);
+        $data = $data['gallery'] ?? $data;
+        $gallery->uploadGallery($data, $dealer);
 
         return $gallery->getGalleryData($dealer);
     }
