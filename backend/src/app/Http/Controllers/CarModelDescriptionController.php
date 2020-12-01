@@ -10,7 +10,13 @@ class CarModelDescriptionController extends Controller
 {
     public function getCategoriesByModel(Request $request)
     {
-        return CarModelDescription::where('car_model_id', $request->model)->get()->unique('body_type')->pluck('body_type');
+        $categories = CarModelDescription::where('car_model_id', $request->model)->select('body_type')->get()->unique('body_type');
+        $categories = $categories->map(function ($item) {
+            $item->body_type_front = ucfirst($item->body_type);
+            return $item;
+        });
+        return $categories->values();
+
     }
 
     public function getYearsByModel(Request $request)

@@ -98,6 +98,25 @@ class AdvertisementService
         if (!empty($data['company_id'])) {
             $advertisements = $advertisements->where('company_id', $data['company_id']);
         }
+        if (!empty($data['value'])) {
+            $data['value'] = str_replace(',','', $data['value']);
+            $advertisements = $advertisements->where('value', '<=', $data['value']);
+        }
+        if (!empty($data['fuel_type'])) {
+            $advertisements = $advertisements->where('fuel_type', $data['fuel_type']);
+        }
+        if (!empty($data['fuel_type'])) {
+            $advertisements = $advertisements->where('fuel_type', $data['fuel_type']);
+        }
+        if (!empty($data['transmission_type'])) {
+            $advertisements = $advertisements->where('transmission_type', $data['transmission_type']);
+        }
+        if (!empty($data['drive_train'])) {
+            $advertisements = $advertisements->where('drive_type', $data['drive_train']);
+        }
+        if (!empty($data['miles'])) {
+            $advertisements = $advertisements->where('miles', '<', $data['miles']);
+        }
 
         return $advertisements;
     }
