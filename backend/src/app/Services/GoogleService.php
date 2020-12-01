@@ -32,6 +32,9 @@ class GoogleService
         $response = $this->client->request('get', $url);
         if ($response->getStatusCode() === 200) {
             $response = json_decode($response->getBody());
+            if (empty($response->results)) {
+                return $data;
+            }
             $response = $response->results[0];
 
             $data = [
