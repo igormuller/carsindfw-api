@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Interest;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\This;
 
 class InterestRepository extends BaseRepository
 {
@@ -17,7 +19,14 @@ class InterestRepository extends BaseRepository
 
     public function all()
     {
-        return $this->entity->all();
+        $company_id = Auth::user()->company_id;
+        $interests = $this->entity->select('interests.*', 'car_makes.name as make_name', 'car_models.name as model_name')
+                                  ->join('advertisements', 'interests.advertisement_id', '=', 'advertisements.id')
+                                  ->join('car_makes', 'advertisements.car_make_id', '=', 'car_makes.id')
+                                  ->join('car_models', 'advertisements.car_model_id', '=', 'car_models.id')
+                                  ->where('advertisements.company_id', $company_id)
+                                  ->get();
+        return $interests;
     }
 
     public function hasRegister(int $advertisement_id, string $email = null, string $phone = null) : Collection

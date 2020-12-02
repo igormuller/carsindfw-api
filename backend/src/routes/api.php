@@ -37,6 +37,7 @@ Route::middleware('auth:api')->group(function () {
             'companies'      => 'CompanyController',
             'dealers'        => 'DealerController',
             'gallery'        => 'GalleryController',
+            'interests'      => 'InterestController',
             'people'         => 'PersonController',
             'states'         => 'StateController',
             'users'          => 'UserController',

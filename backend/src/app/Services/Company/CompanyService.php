@@ -38,6 +38,5 @@ class CompanyService
                 'address.state',
             ]
         )->toArray();
-
     }
 }

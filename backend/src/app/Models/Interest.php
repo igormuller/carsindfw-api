@@ -12,6 +12,7 @@ class Interest extends Model
         'email',
         'phone',
         'description',
+        'status',
     ];
 
     //------------------------------//

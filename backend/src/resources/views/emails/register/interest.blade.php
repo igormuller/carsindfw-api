@@ -335,7 +335,7 @@
                         <tr>
                             <td>
                                 <div class="text" style="padding: 0 3em; text-align: center;">
-                                    <h2>You received a proposal for your car <span>{{ $data['car'] }}</span> visit <span><a href="{{env('APP_URL')}}">CARSinDFW</a></span> to view and response to the proposal.</h2>
+                                    <h2>You received a proposal for your car <span>{{ $data['car'] }}</span> visit <span><a href="{{ $data['link'] }}">CARSinDFW</a></span> to view and response to the proposal.</h2>
                                 </div>
                             </td>
                         </tr>
