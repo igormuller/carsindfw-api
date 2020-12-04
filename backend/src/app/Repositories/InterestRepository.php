@@ -25,6 +25,7 @@ class InterestRepository extends BaseRepository
                                   ->join('car_makes', 'advertisements.car_make_id', '=', 'car_makes.id')
                                   ->join('car_models', 'advertisements.car_model_id', '=', 'car_models.id')
                                   ->where('advertisements.company_id', $company_id)
+                                  ->whereNull('advertisements.deleted_at')
                                   ->get();
         return $interests;
     }
