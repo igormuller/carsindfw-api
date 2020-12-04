@@ -17,6 +17,11 @@ class AdvertisementService
         $this->repository = new AdvertisementRepository();
     }
 
+    public function find(int $id) : Advertisement
+    {
+        return $this->repository->findOrFail($id);
+    }
+
     public function create(array $data) : Advertisement
     {
         $data['company_id'] = Auth::user()->company_id;
@@ -27,13 +32,16 @@ class AdvertisementService
     public function update(Advertisement $advertisement, array $data) : Advertisement
     {
         $data = $this->prepareData($data);
-        return $this->repository->update($advertisement, $data);
+        $advertisement = $this->repository->update($advertisement, $data);
+        return $this->dataToShow($advertisement);
     }
 
     private function prepareData(array $data) : array
     {
         if (!empty($data['features'])) {
             $data['features'] = implode(',', $data['features']);
+        } else {
+            $data['features'] = null;
         }
 
         $data['value']      = str_replace(',', '', $data['value']);

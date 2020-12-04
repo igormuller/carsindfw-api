@@ -63,7 +63,7 @@ class AdvertisementRepository extends BaseRepository
         $entity->fuel_type_front    = EnumCarModelDescription::getFuelTypeName($entity->fuel_type);
         $entity->transmission_front = $entity->transmission . " - " .
                                       EnumCarModelDescription::getTransmissionTypeName($entity->transmission_type);
-        $entity->features           = explode(',', $entity->features);
+        $entity->features           = !empty($entity->features) ? explode(',', $entity->features) : null;
         $entity->show_name = $entity->year.' '.$entity->make_name.' '.$entity->model_name.' '.$entity->drive_type;
         return $entity;
     }

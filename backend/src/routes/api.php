@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('users/info', 'UserController@info');
     Route::get('cities/{state_id}', 'CityController@getCitiesByState');
     Route::post('gallery-dealer/{dealer_id}', 'GalleryDealerController@store');
+    Route::post('gallery-advertisement/{advertisement_id}', 'GalleryAdvertisementController@store');
 
     Route::resources(
         [
@@ -36,7 +37,6 @@ Route::middleware('auth:api')->group(function () {
             'cities'         => 'CityController',
             'companies'      => 'CompanyController',
             'dealers'        => 'DealerController',
-            'gallery'        => 'GalleryController',
             'interests'      => 'InterestController',
             'people'         => 'PersonController',
             'states'         => 'StateController',
