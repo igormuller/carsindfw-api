@@ -15,8 +15,8 @@ class DealerRequest extends FormRequest
     {
         return [
             "name"                 => "required|max:100",
-            "document"             => "required|max:20",
-            "phone"                => "required_without:email|max:12",
+            "document"             => "max:20",
+            "phone"                => "required_without:email|max:14",
             "email"                => "required_without:phone|email",
             "site"                 => "required",
             "instagram"            => "nullable",

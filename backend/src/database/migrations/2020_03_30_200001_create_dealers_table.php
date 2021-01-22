@@ -13,9 +13,9 @@ class CreateDealersTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('broker_id')->nullable();
             $table->string('name', 100);
-            $table->string('document', 20);
+            $table->string('document', 20)->nullable();
             $table->string('phone', 20)->nullable();
-            $table->string('email', 100);
+            $table->string('email', 100)->nullable();
             $table->string('site', 100)->nullable();
             $table->string('instagram', 100)->nullable();
             $table->string('facebook', 100)->nullable();

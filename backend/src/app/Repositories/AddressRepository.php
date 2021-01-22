@@ -11,5 +11,6 @@ class AddressRepository extends BaseRepository
     public function __construct()
     {
         $this->entity = new Address();
+        parent::__construct($this->entity);
     }
 }

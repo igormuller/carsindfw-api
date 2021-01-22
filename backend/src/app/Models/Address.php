@@ -17,7 +17,7 @@ class Address extends Model
         'neighborhood',
         'street',
         'number',
-        'compements',
+        'complements',
         'zipcode',
     ];
 

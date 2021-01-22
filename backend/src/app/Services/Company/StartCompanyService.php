@@ -11,6 +11,7 @@ use App\Services\Broker\BrokerService;
 use App\Services\Dealer\DealerService;
 use App\Services\Person\PersonService;
 use App\Services\Plan\AdminPlanService;
+use App\Services\User\UserService;
 use App\Services\Zipcode\ZipcodeService;
 
 class StartCompanyService
@@ -26,15 +27,17 @@ class StartCompanyService
     {
         $company = $this->create($data);
 
-        $user_repository = new UserRepository();
         $data['company_id'] = $company->id;
-        $data['name'] = $data['first_name']." ".$data["last_name"];
-        $user_repository->create($data);
+        $userData = $data;
+        $userData['name'] = $data['user_name'];
+        $userData['email'] = $data['user_email'];
+        $userService = new UserService();
+        $userService->create($userData);
 
         return $company;
     }
 
-    public function create(Array $data) : Company
+    public function create(array $data) : Company
     {
         $company = $this->repository->create($data);
         $data['company_id'] = $company->id;
@@ -47,7 +50,7 @@ class StartCompanyService
         return $company;
     }
 
-    private function createAddress(Array $data)
+    private function createAddress(array $data)
     {
         $zipcodeService = new ZipcodeService();
         $zipcode = $zipcodeService->searchZipcode($data['zipcode']);
@@ -59,23 +62,17 @@ class StartCompanyService
         $repository->create($data);
     }
 
-    private function createType(Array $data)
+    private function createType(array $data)
     {
         if ($data['type'] === 'person') {
-            $person_service = new PersonService();
-            $data['name'] = $data['first_name']." ".$data["last_name"];
-            $person_service->create($data);
+            $personService = new PersonService();
+            $data['name'] = $data['user_name'];
+            $personService->create($data);
         }
 
         if ($data['type'] === 'dealer') {
-            if (!empty($data['email_dealer'])) {
-                $data['email'] = $data['email_dealer'];
-            }
-            if (!empty($data['name_dealer'])) {
-                $data['name'] = $data['name_dealer'];
-            }
-            $dealer_service = new DealerService();
-            $dealer_service->create($data);
+            $dealerService = new DealerService();
+            $dealerService->create($data);
         }
 
         if ($data['type'] === 'broker') {
