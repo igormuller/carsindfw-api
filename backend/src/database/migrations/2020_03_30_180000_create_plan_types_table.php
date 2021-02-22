@@ -21,6 +21,7 @@ class CreatePlanTypesTable extends Migration
             $table->decimal('value',5,2);
             $table->enum('company_type', ['all', 'person', 'dealer']);
             $table->boolean('active')->default(1);
+            $table->string('stripe_id', 50)->nullable();
             $table->timestamps();
         });
     }

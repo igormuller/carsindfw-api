@@ -23,6 +23,13 @@ Route::get('search-zipcode/{number}', 'ZipcodeController@search');
 Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
 Route::post('register-interest', 'InterestController@register');
 
+Route::get('payment-plans', 'PaymentController@plans');
+Route::get('payment-customer', 'PaymentController@customer');
+Route::get('payment-methods', 'PaymentController@paymentMethods');
+Route::get('payment-subscription', 'PaymentController@subscription');
+Route::get('payment-teste', 'PaymentController@testePayment');
+Route::post('webhook', 'PaymentController@webhook');
+
 Route::middleware('auth:api')->group(function () {
 
     Route::get('users/info', 'UserController@info');
