@@ -18,6 +18,7 @@ class CreatePlanTypesTable extends Migration
             $table->string('name', 50);
             $table->text('description')->nullable();
             $table->integer('days');
+            $table->integer('trial_period_days')->nullable();
             $table->decimal('value',5,2);
             $table->enum('company_type', ['all', 'person', 'dealer']);
             $table->boolean('active')->default(1);

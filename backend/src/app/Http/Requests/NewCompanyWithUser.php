@@ -14,14 +14,18 @@ class NewCompanyWithUser extends FormRequest
     public function rules()
     {
         $rules = [
-            'type'         => 'required|in:person,dealer,broker',
-            'user_name'    => 'required|string',
-            'user_email'   => 'required|unique:users,email',
-            'password'     => 'required|min:6',
-            're_password'  => 'required_with:password|same:password|min:6',
-            'phone'        => 'string|max:14',
-            'zipcode'      => 'required|max:5',
-            'plan_type_id' => 'required|exists:plan_types,id',
+            'type'                 => 'required|in:person,dealer,broker',
+            'user_name'            => 'required|string',
+            'user_email'           => 'required|unique:users,email',
+            'password'             => 'required|min:6',
+            're_password'          => 'required_with:password|same:password|min:6',
+            'phone'                => 'string|max:14',
+            'zipcode'              => 'required|max:5',
+            'plan_type_id'         => 'required|exists:plan_types,id',
+            'card_number'          => 'required',
+            'card_name'            => 'required',
+            'card_expiration_date' => 'required',
+            'card_cvv'             => 'required',
         ];
 
         if ($this->type === 'dealer') {
