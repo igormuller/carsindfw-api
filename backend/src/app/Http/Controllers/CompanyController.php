@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Services\Company\StartCompanyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Exception\CardException;
 
 class CompanyController extends Controller
 {
@@ -19,8 +20,12 @@ class CompanyController extends Controller
 
     public function start(NewCompanyWithUser $request, StartCompanyService $service)
     {
-        $company = $service->createWithUser($request->all());
-        return $company->getAllInfo();
+        try {
+            $company = $service->createWithUser($request->all());
+            return response('Company created success!' . $company->id);
+        } catch (CardException $e) {
+            return response(['error' => ['message' => $e->getMessage()]], 402);
+        }
     }
 
     public function update(Request $request, Company $company)
