@@ -6,7 +6,6 @@ use App\Models\Company;
 use App\Models\PlanType;
 use App\Repositories\AddressRepository;
 use App\Repositories\CompanyRepository;
-use App\Repositories\UserRepository;
 use App\Services\Broker\BrokerService;
 use App\Services\Dealer\DealerService;
 use App\Services\Payment\PaymentService;
@@ -14,6 +13,7 @@ use App\Services\Person\PersonService;
 use App\Services\Plan\AdminPlanService;
 use App\Services\User\UserService;
 use App\Services\Zipcode\ZipcodeService;
+use Stripe\Exception\CardException;
 
 class StartCompanyService
 {
@@ -38,25 +38,33 @@ class StartCompanyService
         return $company;
     }
 
-    public function create(array $data) : Company
+    public function create(array $data)
     {
+        $paymentService = new PaymentService();
+        $paymentMethod = $paymentService->createPaymentMethod($data);
+
         $company = $this->repository->create($data);
         $data['company_id'] = $company->id;
-
         $address = $this->createAddress($data);
 
         $this->createType($data);
-        $this->startPlan($company->id, 1);
+        if ($data['type'] === 'person') {
+            $this->startPlan($company->id, $data['plan_type_id']);
+        } else {
+            $this->startPlan($company->id, 1);
+        }
 
-        $paymentService = new PaymentService();
         $addressData = $address->toArray();
         $addressData['city_name'] = $address->city->name;
         $addressData['state_initials'] = $address->state->initials;
         $dataPayment = array_merge($data, ['address' => $addressData]);
-        $customerPaymentId = $paymentService->createPaymentMethodAndCustomer($dataPayment);
+
+        $customerPayment = $paymentService->createCustomer($dataPayment, $paymentMethod);
+
         $type = PlanType::find($data['plan_type_id']);
-        $paymentService->createSubscription($customerPaymentId, $type->stripe_id, $type->trial_period_days);
-        $company->stripe_id = $customerPaymentId;
+        $paymentService->createSubscription($customerPayment->id, $type->stripe_id, $type->trial_period_days);
+
+        $company->stripe_id = $customerPayment->id;
         $company->save();
 
         return $company;

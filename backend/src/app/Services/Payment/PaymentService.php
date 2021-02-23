@@ -23,13 +23,6 @@ class PaymentService
         return $this->stripe->customers->create($data);
     }
 
-    public function createPaymentMethodAndCustomer(array $data) : string
-    {
-        $paymentMethod = $this->createPaymentMethod($data);
-        $customer = $this->createCustomer($data, $paymentMethod);
-        return $customer->id;
-    }
-
     public function createPaymentMethod(array $data) : PaymentMethod
     {
         $data = $this->prepareDataPaymentMethod($data);
@@ -53,7 +46,7 @@ class PaymentService
     {
         $customerData = [
             'address' => [
-                'coutry'      => 'US',
+                'country'     => 'US',
                 'city'        => $data['address']['city_name'],
                 'state'       => $data['address']['state_initials'],
 //                'line1'       => $data['address']['number'] . ',' . $data['address']['street'],

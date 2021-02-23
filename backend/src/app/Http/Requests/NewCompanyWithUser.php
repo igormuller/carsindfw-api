@@ -24,7 +24,7 @@ class NewCompanyWithUser extends FormRequest
             'plan_type_id'         => 'required|exists:plan_types,id',
             'card_number'          => 'required',
             'card_name'            => 'required',
-            'card_expiration_date' => 'required',
+            'card_expiration_date' => 'required|date_format:m/y',
             'card_cvv'             => 'required',
         ];
 
