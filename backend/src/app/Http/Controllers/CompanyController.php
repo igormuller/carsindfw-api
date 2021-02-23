@@ -24,7 +24,7 @@ class CompanyController extends Controller
             $company = $service->createWithUser($request->all());
             return response('Company created success!' . $company->id);
         } catch (CardException $e) {
-            return response(['error' => ['message' => $e->getMessage()]], 402);
+            return response(['message' => $e->getMessage()], 402);
         }
     }
 
