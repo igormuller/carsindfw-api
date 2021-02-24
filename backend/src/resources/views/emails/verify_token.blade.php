@@ -323,7 +323,7 @@
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td class="logo" style="text-align: center;">
-                                <h1>Hello</h1>
+                                <h1>Verify Token</h1>
                             </td>
                         </tr>
                     </table>
@@ -335,7 +335,7 @@
                         <tr>
                             <td>
                                 <div class="text" style="padding: 0 3em; text-align: center;">
-                                    <h2>You received a proposal for your car <span>{{ $data['car'] }}</span> visit <span><a href="{{ $data['link'] }}">CARSinDFW</a></span> to view and response to the proposal.</h2>
+                                    <h2>To validate your registration and have access to our entire platform, access the link to validate your email! <span><a href="{{ $data['link'] }}">VERIFY</a></span></h2>
                                 </div>
                             </td>
                         </tr>
@@ -358,7 +358,7 @@
                                     </tr>
                                     <tr>
                                         <td style="text-align: center;">
-                                            <p>&copy; 2021 CARSinDFW. All Rights Reserved</p>
+                                            <p>&copy; 2020 CARSinDFW. All Rights Reserved</p>
                                         </td>
                                     </tr>
                                 </table>

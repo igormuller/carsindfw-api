@@ -13,6 +13,13 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
 
+    private $service;
+
+    public function __construct()
+    {
+        $this->service = new UserService();
+    }
+
     public function checkVerifyToken(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -43,6 +50,7 @@ class UserController extends Controller
 
         $user->email_verify_token = Hash::make($user->email);
         $user->save();
+        $this->service->sendEmailVerify($user);
         return response(['message' => 'New token generate']);
     }
 
@@ -63,8 +71,7 @@ class UserController extends Controller
         );
 
         $data = $request->all();
-        $service = new UserService();
-        return $service->create($data);
+        return $this->service->create($data);
     }
 
     public function update(Request $request, User $user)

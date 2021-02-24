@@ -2,8 +2,10 @@
 
 namespace App\Services\User;
 
+use App\Mail\EmailVerifyToken;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
@@ -17,6 +19,11 @@ class UserService
     public function create(array $data) : User
     {
         return $this->repository->create($data);
-//        $userVerification = $this->repository->createVerification($user);
+    }
+
+    public function sendEmailVerify(User $user)
+    {
+        $data['link'] = env('FRONT_URL') . '/verify-token?user_check=' . $user->id . '&token=' . $user->email_verify_token;
+        Mail::to($user->email)->send(new EmailVerifyToken($data));
     }
 }
