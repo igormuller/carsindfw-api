@@ -18,12 +18,14 @@ class UserService
 
     public function create(array $data) : User
     {
-        return $this->repository->create($data);
+        $user = $this->repository->create($data);
+        $this->sendEmailVerify($user);
+        return $user;
     }
 
     public function sendEmailVerify(User $user)
     {
-        $data['link'] = env('FRONT_URL') . '/verify-token?user_check=' . $user->id . '&token=' . $user->email_verify_token;
+        $data['link'] = env('FRONT_URL') . '/validate-token?user_check=' . $user->id . '&token=' . $user->email_verify_token;
         Mail::to($user->email)->send(new EmailVerifyToken($data));
     }
 }
