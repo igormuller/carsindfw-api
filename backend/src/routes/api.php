@@ -22,8 +22,10 @@ Route::get('dealer/{dealer_id}', 'DealerController@dealerDetail');
 Route::get('search-zipcode/{number}', 'ZipcodeController@search');
 Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
 Route::post('register-interest', 'InterestController@register');
+Route::get('verify-token/{id}', 'UserController@checkVerifyToken');
+Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api','verified'])->group(function () {
 
     Route::get('users/info', 'UserController@info');
     Route::get('cities/{state_id}', 'CityController@getCitiesByState');

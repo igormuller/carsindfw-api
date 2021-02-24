@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\User\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,10 +13,39 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
 
-    public function teste(Request $request)
+    public function checkVerifyToken(Request $request)
     {
-        dd("aqui");
+        $user = User::findOrFail($request->id);
+        if (!empty($user->email_verified_at)) {
+            return response(['message' => 'E-mail already verified!'], 422);
+        }
+
+        if (Hash::check($user->email, $request->token)) {
+            $user->email_verified_at = Carbon::now();
+            $user->save();
+            return response(['message' => 'E-mail verified']);
+        }
+
+        return response(['message' => 'Token not checked'], 403);
     }
+
+    public function newVerifyToken(string $email)
+    {
+        $user = User::where('email', $email)->first();
+
+        if (empty($user)) {
+            return response(['message' => 'E-mail not exist!'], 404);
+        }
+
+        if (!empty($user->email_verified_at)) {
+            return response(['message' => 'E-mail already verified!'], 422);
+        }
+
+        $user->email_verify_token = Hash::make($user->email);
+        $user->save();
+        return response(['message' => 'New token generate']);
+    }
+
     public function index()
     {
         return User::thisCompany()->get();

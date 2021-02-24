@@ -19,6 +19,7 @@ class UserRepository
     public function create(array $data) : User
     {
         $data['password'] = Hash::make($data['password']);
+        $data['email_verify_token'] = Hash::make($data['email']);
         return $this->entity->create($data);
     }
 
