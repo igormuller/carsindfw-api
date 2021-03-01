@@ -83,24 +83,22 @@ class UserController extends Controller
                 'password' => 'min:6',
             ]
         );
-        $data = $request->all();
-
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+        if ($user->company_id !== Auth::user()->company_id) {
+            return response("Don't find user!", 404);
         }
-        $user->update($data);
-        return $user;
+
+        return $this->service->update($request->all(), $user);
     }
 
     public function show($id)
     {
-        $user = User::thisCompany()->where('id', $id)->first();
+        $user = $this->service->findByCompany($id);
 
         if (empty($user)) {
-            return \response("Don't find user!", 404);
+            return response("Don't find user!", 404);
         }
 
-        return $user;
+        return $this->service->detail($user);
     }
 
     public function destroy(User $user)
