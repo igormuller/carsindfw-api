@@ -116,8 +116,6 @@ class UserController extends Controller
     public function info()
     {
         $user = Auth::user();
-        $data_user = $user->toArray();
-        $data_user['company'] = $user->getInfoCompany();
-        return $data_user;
+        return $this->service->userInfo($user);
     }
 }

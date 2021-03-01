@@ -23,6 +23,13 @@ class UserService
         return $this->repository->findByCompanyLogged($id);
     }
 
+    public function userInfo(User $user) : User
+    {
+        $user = $this->detail($user);
+        $user->company = $user->getInfoCompany();
+        return $user;
+    }
+
     public function create(array $data) : User
     {
         $user = $this->repository->create($data);
