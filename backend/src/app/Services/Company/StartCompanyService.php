@@ -45,24 +45,24 @@ class StartCompanyService
 
         $company = $this->repository->create($data);
         $data['company_id'] = $company->id;
+
         $address = $this->createAddress($data);
-
-        $this->createType($data);
-        if ($data['type'] === 'person') {
-            $this->startPlan($company->id, $data['plan_type_id']);
-        } else {
-            $this->startPlan($company->id, 1);
-        }
-
         $addressData = $address->toArray();
         $addressData['city_name'] = $address->city->name;
         $addressData['state_initials'] = $address->state->initials;
-        $dataPayment = array_merge($data, ['address' => $addressData]);
 
+        $dataPayment = array_merge($data, ['address' => $addressData]);
         $customerPayment = $paymentService->createCustomer($dataPayment, $paymentMethod);
 
+        $this->createType($data);
         $type = PlanType::find($data['plan_type_id']);
-        $paymentService->createSubscription($customerPayment->id, $type->stripe_id, $type->trial_period_days);
+        if ($data['type'] === 'person') {
+            $this->startPlan($company->id, $data['plan_type_id']);
+            $paymentService->cratePaymentIntent($type->value, $customerPayment->id, $paymentMethod->id);
+        } else {
+            $this->startPlan($company->id, 1);
+            $paymentService->createSubscription($customerPayment->id, $type->stripe_id, $type->trial_period_days);
+        }
 
         $company->stripe_id = $customerPayment->id;
         $company->save();

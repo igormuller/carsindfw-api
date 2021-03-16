@@ -66,6 +66,28 @@ class PaymentService
         return $customerData;
     }
 
+    public function allPayments(string $client_id)
+    {
+        return $this->stripe->paymentMethods->all(
+            [
+                'customer' => $client_id,
+                'type' => 'card'
+            ]
+        );
+    }
+
+    public function cratePaymentIntent(int $amount, string $customer_id, string $payment_method_id)
+    {
+        return $this->stripe->paymentIntents->create([
+            'amount' => $amount,
+            'currency' => 'usd',
+            'customer' => $customer_id,
+            'payment_method' => $payment_method_id,
+            'off_session' => true,
+            'confirm' => true
+        ]);
+    }
+
     private function prepareDataPaymentMethod(array $data) : array
     {
         $expiration = explode('/', $data['card_expiration_date']);
