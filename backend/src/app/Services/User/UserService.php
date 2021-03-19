@@ -26,7 +26,7 @@ class UserService
     public function userInfo(User $user) : User
     {
         $user = $this->detail($user);
-        $user->company = $user->getInfoCompany();
+        $user->company_type = $user->getInfoCompany();
         return $user;
     }
 

@@ -6,7 +6,6 @@ use App\Models\Dealer;
 use App\Repositories\AddressRepository;
 use App\Repositories\DealerRepository;
 use App\Services\General\StorageService;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,6 +26,11 @@ class DealerService
     public function find(int $id) : Dealer
     {
         return $this->repository->findOrFail($id);
+    }
+
+    public function findByCompany(int $companyID) : Dealer
+    {
+        return $this->repository->findByCompany($companyID);
     }
 
     public function update(Dealer $dealer, array $data) : Dealer

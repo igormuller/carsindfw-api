@@ -14,6 +14,11 @@ class BaseRepository
         $this->entity = $entity;
     }
 
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
     public function create(array $data): Model
     {
         return $this->entity->create($data);
