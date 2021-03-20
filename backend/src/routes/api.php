@@ -14,6 +14,7 @@ Route::get('last-cars', 'AdvertisementController@getLastCars');
 Route::get('car-detail/{advertisement}', 'AdvertisementController@show');
 Route::get('car-model-description/{id}', 'CarModelDescriptionController@getData');
 Route::get('dealers-by-city', 'DealerController@getAllDealersByCity');
+Route::get('cities/{state_id}', 'CityController@getCitiesByState');
 Route::get('search', 'AdvertisementController@search');
 Route::post('contact-us', 'ContactUsController@contact');
 Route::get('cities-dealers', 'DealerController@citiesDealers');
@@ -28,9 +29,16 @@ Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
 Route::middleware(['auth:api','verified'])->group(function () {
 
     Route::get('users/info', 'UserController@info');
-    Route::get('cities/{state_id}', 'CityController@getCitiesByState');
+
     Route::post('gallery-dealer/{dealer_id}', 'GalleryDealerController@store');
     Route::post('gallery-advertisement/{advertisement_id}', 'GalleryAdvertisementController@store');
+
+    Route::get('payment-general-detail', 'PaymentController@detailGeneral');
+    Route::get('payment-customer-detail', 'PaymentController@detailCustomer');
+    Route::get('payment-method-detail', 'PaymentController@detailPaymentMethod');
+    Route::get('payment-intent-detail', 'PaymentController@detailPaymentIntent');
+    Route::get('payment-subscription-detail', 'PaymentController@detailSubscription');
+    Route::get('payment-invoice-detail', 'PaymentController@detailInvoice');
 
     Route::resources(
         [

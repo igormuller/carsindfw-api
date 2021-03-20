@@ -2,6 +2,8 @@
 
 namespace App\Services\Payment;
 
+use App\Models\PlanType;
+use Carbon\Carbon;
 use Stripe\Customer;
 use Stripe\PaymentMethod;
 use Stripe\StripeClient;
@@ -29,16 +31,13 @@ class PaymentService
         return $this->stripe->paymentMethods->create($data);
     }
 
-    public function createSubscription(string $customer, string $price, int $trialPeriod = null) : Subscription
+    public function createSubscription(string $customer, PlanType $planType) : Subscription
     {
         $data = [
-            'customer' => $customer,
-            'items' => [['price' => $price]],
+            'customer'          => $customer,
+            'items'             => [['price' => $planType->stripe_id]],
+            'trial_period_days' => $planType->trial_period_days ?? 0,
         ];
-        if (!empty($trialPeriod)) {
-            $data['trial_period_days'] = $trialPeriod;
-        }
-
         return $this->stripe->subscriptions->create($data);
     }
 
@@ -66,16 +65,6 @@ class PaymentService
         return $customerData;
     }
 
-    public function allPayments(string $client_id)
-    {
-        return $this->stripe->paymentMethods->all(
-            [
-                'customer' => $client_id,
-                'type' => 'card'
-            ]
-        );
-    }
-
     public function cratePaymentIntent(int $amount, string $customer_id, string $payment_method_id)
     {
         return $this->stripe->paymentIntents->create([
@@ -101,5 +90,105 @@ class PaymentService
             ],
         ];
         return $paymentMethodData;
+    }
+
+    public function userAllDetail(string $customer_id) : array
+    {
+        $detail['customer']        = $this->dataCustomer($customer_id);
+        $detail['payment_methods'] = $this->dataPaymentMethodByCustomer($customer_id);
+        $detail['payment_intents'] = $this->dataPaymentIntentByCustomer($customer_id);
+        $detail['subscription']    = $this->dataSubscriptionByCustomer($customer_id);
+        $detail['invoices']        = $this->dataInvoicesByCustomer($customer_id);
+        return $detail;
+    }
+
+    public function dataCustomer(string $customer_id) : array
+    {
+        $customer      = $this->stripe->customers->retrieve($customer_id);
+        $data['email'] = $customer->email;
+        $data['name']  = $customer->name;
+        return $data;
+    }
+
+    public function dataPaymentMethodByCustomer(string $customer_id) : array
+    {
+        $data = [];
+
+        $paymentMethods       = $this->stripe->paymentMethods->all(['customer' => $customer_id, 'type' => 'card']);
+        $customer             = $this->stripe->customers->retrieve($customer_id);
+        $paymentMethodDefault = $customer->invoice_settings->default_payment_method;
+
+        foreach ($paymentMethods as $key => $paymentMethod) {
+            $card = [
+                'default'    => $paymentMethodDefault === $paymentMethod->id,
+                'brand'      => $paymentMethod->card->brand,
+                'expiration' => $paymentMethod->card->exp_month . '/' . $paymentMethod->card->exp_year,
+                'last4'      => $paymentMethod->card->last4,
+            ];
+            $data[$key] = $card;
+        }
+        return $data;
+    }
+
+    public function dataPaymentIntentByCustomer(string $customer_id) : array
+    {
+        $data = [];
+        $paymentIntents = $this->stripe->paymentIntents->all(['customer'=>$customer_id]);
+        foreach ($paymentIntents as $key => $paymentIntent) {
+            $aux = [
+                'amount'              => $paymentIntent->amount,
+                'canceled_at'         => $this->formatDate($paymentIntent->canceled_at),
+                'cancellation_reason' => $paymentIntent->cancellation_reason,
+                'created'             => $this->formatDate($paymentIntent->created),
+                'status'              => $paymentIntent->status,
+            ];
+            $data[$key] = $aux;
+        }
+        return $data;
+    }
+
+    public function dataSubscriptionByCustomer(string $customer_id) : array
+    {
+        $data = [];
+        $subscriptions = $this->stripe->subscriptions->all(['customer' => $customer_id]);
+        foreach ($subscriptions as $key => $subscription) {
+            $aux = [
+                'billing_cycle_anchor'   => $this->formatDate($subscription->billing_cycle_anchor),
+                'created'                => $this->formatDate($subscription->created),
+                'current_period_start'   => $this->formatDate($subscription->current_period_start),
+                'current_period_end'     => $this->formatDate($subscription->current_period_end),
+                'plan_amount'            => $subscription->plan->amount,
+                'plan_trial_period_days' => $subscription->plan->trial_period_days,
+                'start_date'             => $this->formatDate($subscription->start_date),
+                'status'                 => $subscription->status,
+                'trial_end'              => $this->formatDate($subscription->trial_end),
+                'trial_start'            => $this->formatDate($subscription->trial_start),
+            ];
+            $data[$key] = $aux;
+        }
+        return $data;
+    }
+
+    public function dataInvoicesByCustomer(string $customer_id) : array
+    {
+        $data = [];
+        $invoices = $this->stripe->invoices->all(['customer' => $customer_id]);
+        foreach ($invoices as $key => $invoice) {
+            $aux = [
+                'amount_paid'    => $invoice->amount_paid,
+                'created'        => $this->formatDate($invoice->created),
+                'customer_email' => $invoice->customer_email,
+                'customer_name'  => $invoice->customer_name,
+                'number'         => $invoice->number,
+                'status'         => $invoice->status,
+            ];
+            $data[$key] = $aux;
+        }
+        return $data;
+    }
+
+    private function formatDate($date) :? string
+    {
+        return empty($date) ? null : Carbon::parse($date)->format('Y-m-d');
     }
 }

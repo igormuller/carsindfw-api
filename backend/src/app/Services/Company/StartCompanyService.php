@@ -58,10 +58,11 @@ class StartCompanyService
         $type = PlanType::find($data['plan_type_id']);
         if ($data['type'] === 'person') {
             $this->startPlan($company->id, $data['plan_type_id']);
-            $paymentService->cratePaymentIntent($type->value, $customerPayment->id, $paymentMethod->id);
+            $amount = number_format($type->value, 2, '', '');
+            $paymentService->cratePaymentIntent($amount, $customerPayment->id, $paymentMethod->id);
         } else {
             $this->startPlan($company->id, 1);
-            $paymentService->createSubscription($customerPayment->id, $type->stripe_id, $type->trial_period_days);
+            $paymentService->createSubscription($customerPayment->id, $type);
         }
 
         $company->stripe_id = $customerPayment->id;
