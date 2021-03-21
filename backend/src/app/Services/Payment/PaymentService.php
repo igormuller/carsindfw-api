@@ -3,7 +3,10 @@
 namespace App\Services\Payment;
 
 use App\Models\PlanType;
+use App\Models\User;
+use App\Services\Company\CompanyService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Stripe\Customer;
 use Stripe\PaymentMethod;
 use Stripe\StripeClient;
@@ -94,7 +97,8 @@ class PaymentService
 
     public function userAllDetail(string $customer_id) : array
     {
-        $detail['customer']        = $this->dataCustomer($customer_id);
+        $user = Auth::user();
+        $detail['customer']        = $this->dataCustomer($customer_id, $user);
         $detail['payment_methods'] = $this->dataPaymentMethodByCustomer($customer_id);
         $detail['payment_intents'] = $this->dataPaymentIntentByCustomer($customer_id);
         $detail['subscription']    = $this->dataSubscriptionByCustomer($customer_id);
@@ -102,11 +106,15 @@ class PaymentService
         return $detail;
     }
 
-    public function dataCustomer(string $customer_id) : array
+    public function dataCustomer(string $customer_id, User $user) : array
     {
         $customer      = $this->stripe->customers->retrieve($customer_id);
-        $data['email'] = $customer->email;
-        $data['name']  = $customer->name;
+        $service = new CompanyService();
+        $data['plan_type'] = $service->detailByPlanType($user->company);
+        $data['last_plan'] = $service->detailLastPlan($user->company);
+        $data['plans']     = $service->detailByPlans($user->company);
+        $data['email']     = $customer->email;
+        $data['name']      = $customer->name;
         return $data;
     }
 
@@ -137,6 +145,7 @@ class PaymentService
         foreach ($paymentIntents as $key => $paymentIntent) {
             $aux = [
                 'amount'              => $paymentIntent->amount,
+                'amount_front'        => $this->formatCurrency($paymentIntent->amount),
                 'canceled_at'         => $this->formatDate($paymentIntent->canceled_at),
                 'cancellation_reason' => $paymentIntent->cancellation_reason,
                 'created'             => $this->formatDate($paymentIntent->created),
@@ -157,6 +166,7 @@ class PaymentService
                 'created'                => $this->formatDate($subscription->created),
                 'current_period_start'   => $this->formatDate($subscription->current_period_start),
                 'current_period_end'     => $this->formatDate($subscription->current_period_end),
+                'plan_amount_front'      => $this->formatCurrency($subscription->plan->amount),
                 'plan_amount'            => $subscription->plan->amount,
                 'plan_trial_period_days' => $subscription->plan->trial_period_days,
                 'start_date'             => $this->formatDate($subscription->start_date),
@@ -175,12 +185,13 @@ class PaymentService
         $invoices = $this->stripe->invoices->all(['customer' => $customer_id]);
         foreach ($invoices as $key => $invoice) {
             $aux = [
-                'amount_paid'    => $invoice->amount_paid,
-                'created'        => $this->formatDate($invoice->created),
-                'customer_email' => $invoice->customer_email,
-                'customer_name'  => $invoice->customer_name,
-                'number'         => $invoice->number,
-                'status'         => $invoice->status,
+                'amount_paid'       => $invoice->amount_paid,
+                'amount_paid_front' => $this->formatCurrency($invoice->amount_paid),
+                'created'           => $this->formatDate($invoice->created),
+                'customer_email'    => $invoice->customer_email,
+                'customer_name'     => $invoice->customer_name,
+                'number'            => $invoice->number,
+                'status'            => $invoice->status,
             ];
             $data[$key] = $aux;
         }
@@ -190,5 +201,10 @@ class PaymentService
     private function formatDate($date) :? string
     {
         return empty($date) ? null : Carbon::parse($date)->format('Y-m-d');
+    }
+
+    private function formatCurrency(string $amount) : string
+    {
+        return substr_replace($amount, '.', (strlen($amount)-2), 0);
     }
 }

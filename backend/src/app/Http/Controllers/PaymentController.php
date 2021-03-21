@@ -23,7 +23,7 @@ class PaymentController extends Controller
     public function detailCustomer()
     {
         $user = Auth::user();
-        return $this->service->dataCustomer($user->company->stripe_id);
+        return $this->service->dataCustomer($user->company->stripe_id, $user);
     }
 
     public function detailPaymentMethod()

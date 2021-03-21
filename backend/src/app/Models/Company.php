@@ -45,6 +45,11 @@ class Company extends Model
         return $this->hasMany("App\Models\Plan");
     }
 
+    public function planType()
+    {
+        return $this->belongsTo("App\Models\PlanType");
+    }
+
     public function thisType()
     {
         $type = $this->type;

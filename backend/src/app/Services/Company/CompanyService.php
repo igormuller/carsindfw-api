@@ -3,8 +3,10 @@
 namespace App\Services\Company;
 
 use App\Models\Company;
+use App\Models\Plan;
 use App\Repositories\CompanyRepository;
 use App\Services\Dealer\GalleryDealerService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class CompanyService
@@ -32,5 +34,26 @@ class CompanyService
                 'address.state',
             ]
         )->toArray();
+    }
+
+    public function detailLastPlan(Company $company)
+    {
+        $plan = $company->plans->last();
+        $plan->started_date = Carbon::make($plan->started_at)->format('Y-m-d');
+        $plan->finished_date = Carbon::make($plan->finished_at)->format('Y-m-d');
+        return $plan->detail();
+    }
+
+    public function detailByPlans(Company $company)
+    {
+        $plans = $company->plans;
+        return $plans->map(function (Plan $plan) {
+            return $plan->detail();
+        });
+    }
+
+    public function detailByPlanType(Company $company)
+    {
+        return $company->planType;
     }
 }
