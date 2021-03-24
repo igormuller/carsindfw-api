@@ -11,10 +11,9 @@ class CreatePlansTable extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('plan_type_id');
             $table->dateTime('started_at');
             $table->dateTime('finished_at');
-            $table->enum('status', ['opened', 'warning', 'waiting_payment', 'encerred']);
-            $table->unsignedBigInteger('plan_type_id');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies');

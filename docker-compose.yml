@@ -8,7 +8,7 @@ services:
     volumes:
       - ./backend/src:/var/www
     environment:
-      - "XDEBUG_CONFIG=remote_host=localhost remote_port=9000 remote_enable=1 remote_autostart = 1"
+      - "XDEBUG_CONFIG=remote_host=host.docker.internal remote_port=9000 remote_enable=1 remote_autostart = 1"
       - "PHP_IDE_CONFIG=serverName=xdebug-docker"
 
   carsindfw_nginx:

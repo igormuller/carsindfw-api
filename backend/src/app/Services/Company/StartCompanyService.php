@@ -2,6 +2,8 @@
 
 namespace App\Services\Company;
 
+use App\Enums\TypeEnum;
+use App\Models\Address;
 use App\Models\Company;
 use App\Models\PlanType;
 use App\Repositories\AddressRepository;
@@ -14,6 +16,7 @@ use App\Services\Plan\AdminPlanService;
 use App\Services\User\UserService;
 use App\Services\Zipcode\ZipcodeService;
 use Stripe\Exception\CardException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class StartCompanyService
 {
@@ -52,14 +55,29 @@ class StartCompanyService
         $addressData['state_initials'] = $address->state->initials;
 
         $dataPayment = array_merge($data, ['address' => $addressData]);
-        $customerPayment = $paymentService->createCustomer($dataPayment, $paymentMethod);
+        $customerPayment = null;
+        try {
+            $customerPayment = $paymentService->createCustomer($dataPayment, $paymentMethod);
+        } catch (CardException $e) {
+            $address->delete();
+            $company->delete();
+            throw new CardException($e->getMessage(), $e->getCode());
+        }
+
+        if (empty($customerPayment)) {
+            throw new HttpException('402', 'Internal error, contact us to resolve this problem!');
+        }
 
         $this->createType($data);
         $type = PlanType::find($data['plan_type_id']);
         if ($data['type'] === 'person') {
-            $this->startPlan($company->id, $data['plan_type_id']);
             $amount = number_format($type->value, 2, '', '');
-            $paymentService->cratePaymentIntent($amount, $customerPayment->id, $paymentMethod->id);
+            try {
+                $paymentIntent = $paymentService->cratePaymentIntent($amount, $customerPayment->id, $paymentMethod->id);
+                $this->startPlan($company->id, $data['plan_type_id']);
+            } catch (\Exception $e) {
+                $company->status = TypeEnum::COMPANY_STATUS_WARNING_PAYMENT;
+            }
         } else {
             $this->startPlan($company->id, 1);
             $paymentService->createSubscription($customerPayment->id, $type);
@@ -71,7 +89,7 @@ class StartCompanyService
         return $company;
     }
 
-    private function createAddress(array $data)
+    private function createAddress(array $data) : Address
     {
         $zipcodeService = new ZipcodeService();
         $zipcode = $zipcodeService->searchZipcode($data['zipcode']);
@@ -102,10 +120,10 @@ class StartCompanyService
         }
     }
 
-    private function startPlan(Int $company_id, Int $type)
+    private function startPlan(int $company_id, int $type, array $option = [])
     {
         $plan_service = new AdminPlanService();
         $type = PlanType::find($type);
-        $plan_service->startPlan($company_id, $type);
+        $plan_service->create($type, $company_id, $option);
     }
 }

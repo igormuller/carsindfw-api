@@ -75,6 +75,7 @@ class PaymentService
             'currency' => 'usd',
             'customer' => $customer_id,
             'payment_method' => $payment_method_id,
+            'payment_method_types' => ['card'],
             'off_session' => true,
             'confirm' => true
         ]);

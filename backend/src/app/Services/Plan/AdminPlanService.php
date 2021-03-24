@@ -2,7 +2,6 @@
 
 namespace App\Services\Plan;
 
-use App\Enums\TypeEnum;
 use App\Models\Plan;
 use App\Models\PlanType;
 use App\Repositories\PlanRepository;
@@ -11,44 +10,23 @@ use Carbon\Carbon;
 class AdminPlanService
 {
     private $repository;
-    private $type;
 
     public function __construct()
     {
         $this->repository = new PlanRepository();
     }
 
-    public function startPlan(Int $company_id, PlanType $type, Int $started = null, Int $finished = null) : Plan
+    public function create(PlanType $type, int $company_id, array $options = []) : Plan
     {
-        $this->type = $type;
-        $started_at  = $this->getStartDate($started);
-        $finished_at = $this->getFinishDate($finished);
+        $started_at = Carbon::now();
+        $finished_at = Carbon::now()->addDays($type->days);
         $data = [
             'company_id'   => $company_id,
-            'started_at'   => $started_at,
-            'finished_at'  => $finished_at,
-            'status'       => TypeEnum::PLAN_OPENED,
             'plan_type_id' => $type->id,
+            'started_at'   => !empty($options['started']) ? $started_at->addDays($options['started']) : $started_at,
+            'finished_at'  => !empty($options['finished']) ? $finished_at->addDays($options['finished']) : $finished_at,
         ];
 
         return $this->repository->create($data);
-    }
-
-    private function getStartDate(Int $started = null) : Carbon
-    {
-        $started_at = Carbon::now();
-        if (!empty($started)) {
-            $started_at = $started_at->addDays($started);
-        }
-        return $started_at;
-    }
-
-    private function getFinishDate(Int $finished = null) : Carbon
-    {
-        $finished_at = Carbon::now()->addDays($this->type->days);
-        if (!empty($finished)) {
-            $finished_at = $finished_at->addDays($finished);
-        }
-        return $finished_at;
     }
 }

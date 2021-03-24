@@ -4,18 +4,18 @@ namespace App\Enums;
 
 abstract class TypeEnum extends Enum
 {
-    const PLAN_OPENED          = "opened";
-    const PLAN_WARNING         = "warning";
-    const PLAN_WAITING_PAYMENT = "waiting_payment";
-    const PLAN_ENCERRED        = "encerred";
+    const COMPANY_STATUS_OPENED          = "opened";
+    const COMPANY_STATUS_CANCELED        = "canceled";
+    const COMPANY_STATUS_WARNING         = "warning";
+    const COMPANY_STATUS_WARNING_PAYMENT = "warning_payment";
 
     public static function getPlanStatus()
     {
         return [
-            self::PLAN_OPENED,
-            self::PLAN_WARNING,
-            self::PLAN_WAITING_PAYMENT,
-            self::PLAN_ENCERRED,
+            self::COMPANY_STATUS_OPENED,
+            self::COMPANY_STATUS_WARNING,
+            self::COMPANY_STATUS_WARNING_PAYMENT,
+            self::COMPANY_STATUS_CANCELED,
         ];
     }
 }
