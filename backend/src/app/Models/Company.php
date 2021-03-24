@@ -8,8 +8,10 @@ class Company extends Model
 {
     protected $fillable = [
         'type',
-        'blocked',
         'plan_type_id',
+        'blocked',
+        'status',
+        'stripe_id'
     ];
 
     //------------------------------//

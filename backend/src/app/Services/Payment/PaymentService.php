@@ -123,6 +123,7 @@ class PaymentService
         $data['plans']     = $service->detailByPlans($user->company);
         $data['email']     = $customer->email;
         $data['name']      = $customer->name;
+        $data['status']    = $user->company->status;
         return $data;
     }
 

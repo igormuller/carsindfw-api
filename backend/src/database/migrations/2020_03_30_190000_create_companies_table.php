@@ -13,7 +13,7 @@ class CreateCompaniesTable extends Migration
             $table->enum('type', ['person', 'dealer', 'broker'])->default('dealer');
             $table->unsignedBigInteger('plan_type_id');
             $table->boolean('blocked')->nullable();
-            $table->enum('status', ['opened', 'canceled', 'warning', 'warning_payment']);
+            $table->enum('status', ['actived', 'canceled', 'warning', 'warning_payment']);
             $table->string('stripe_id', 50)->nullable();
             $table->timestamps();
             $table->foreign('plan_type_id')->references('id')->on('plan_types');
