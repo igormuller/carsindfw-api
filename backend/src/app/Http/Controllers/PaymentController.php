@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TypeEnum;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,19 @@ class PaymentController extends Controller
 
     public function __construct() {
         $this->service = new PaymentService();
+    }
+
+    public function cancelSubscription()
+    {
+        $company = Auth::user()->company;
+        $response = $this->service->cancelSubscriptionByCustomer($company->stripe_id);
+
+        if ($response) {
+            $company->status = TypeEnum::COMPANY_STATUS_CANCELED;
+            $company->save();
+            return \response(["message" => "Subscription canceled"]);
+        }
+        return \response(["message" => "Error when cancel Subscription"]);
     }
 
     public function detailGeneral()

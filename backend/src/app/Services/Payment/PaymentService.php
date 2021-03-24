@@ -96,6 +96,13 @@ class PaymentService
         return $paymentMethodData;
     }
 
+    public function cancelSubscriptionByCustomer(string $customer_id) : bool
+    {
+        $subscriptions = $this->stripe->subscriptions->all(['customer' => $customer_id, 'status' => 'active']);
+        $subscription = $this->stripe->subscriptions->cancel($subscriptions->data[0]->id);
+        return !empty($subscription->canceled_at);
+    }
+
     public function userAllDetail(string $customer_id) : array
     {
         $user = Auth::user();
@@ -109,8 +116,8 @@ class PaymentService
 
     public function dataCustomer(string $customer_id, User $user) : array
     {
-        $customer      = $this->stripe->customers->retrieve($customer_id);
-        $service = new CompanyService();
+        $customer = $this->stripe->customers->retrieve($customer_id);
+        $service  = new CompanyService();
         $data['plan_type'] = $service->detailByPlanType($user->company);
         $data['last_plan'] = $service->detailLastPlan($user->company);
         $data['plans']     = $service->detailByPlans($user->company);
