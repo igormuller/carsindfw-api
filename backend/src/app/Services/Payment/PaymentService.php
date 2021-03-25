@@ -2,11 +2,13 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\TypeEnum;
 use App\Models\PlanType;
 use App\Models\User;
 use App\Services\Company\CompanyService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Stripe\Customer;
 use Stripe\PaymentMethod;
 use Stripe\StripeClient;
@@ -56,6 +58,7 @@ class PaymentService
                 'postal_code' => $data['address']['zipcode'],
             ],
             'email' => $data['user_email'],
+            'phone' => $data['phone']?? null,
             'name'  => $data['type'] === 'person' ? $data['user_name'] : $data['name'],
             'metadata' => [
                 'company' => $data['company_id'],
@@ -123,7 +126,7 @@ class PaymentService
         $data['plans']     = $service->detailByPlans($user->company);
         $data['email']     = $customer->email;
         $data['name']      = $customer->name;
-        $data['status']    = $user->company->status;
+        $data['status']    = TypeEnum::getCompanyStatusName($user->company->status);
         return $data;
     }
 
@@ -138,7 +141,7 @@ class PaymentService
         foreach ($paymentMethods as $key => $paymentMethod) {
             $card = [
                 'default'    => $paymentMethodDefault === $paymentMethod->id,
-                'brand'      => $paymentMethod->card->brand,
+                'brand'      => Str::upper($paymentMethod->card->brand),
                 'expiration' => $paymentMethod->card->exp_month . '/' . $paymentMethod->card->exp_year,
                 'last4'      => $paymentMethod->card->last4,
             ];
@@ -158,6 +161,7 @@ class PaymentService
                 'canceled_at'         => $this->formatDate($paymentIntent->canceled_at),
                 'cancellation_reason' => $paymentIntent->cancellation_reason,
                 'created'             => $this->formatDate($paymentIntent->created),
+                'description'         => $paymentIntent->statement_descriptor,
                 'status'              => $paymentIntent->status,
             ];
             $data[$key] = $aux;

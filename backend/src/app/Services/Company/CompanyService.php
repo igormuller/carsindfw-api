@@ -36,9 +36,12 @@ class CompanyService
         )->toArray();
     }
 
-    public function detailLastPlan(Company $company)
+    public function detailLastPlan(Company $company) :? Plan
     {
         $plan = $company->plans->last();
+        if (empty($plan)) {
+            return null;
+        }
         $plan->started_date = Carbon::make($plan->started_at)->format('Y-m-d');
         $plan->finished_date = Carbon::make($plan->finished_at)->format('Y-m-d');
         return $plan->detail();
