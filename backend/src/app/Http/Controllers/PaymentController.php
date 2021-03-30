@@ -79,6 +79,27 @@ class PaymentController extends Controller
         }
     }
 
+    public function defaultPaymentMethod(Request $request)
+    {
+        $request->validate(['id' => 'required']);
+        try {
+            $user = Auth::user();
+            $this->service->defaultPaymentMethod($request->id, $user->company->stripe_id);
+        } catch (CardException $e) {
+            return response(['message' => $e->getMessage()], 402);
+        }
+    }
+
+    public function deletePaymentMethod($id)
+    {
+//        $request->validate(['id' => 'required']);
+        try {
+            $this->service->deletePaymentMethod($id);
+        } catch (CardException $e) {
+            return response(['message' => $e->getMessage()], 402);
+        }
+    }
+
     public function webhook(Request $request)
     {
         return "teste";

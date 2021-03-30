@@ -110,9 +110,9 @@ class PaymentService
 
     public function cancelSubscriptionByCustomer(string $customer_id) : bool
     {
-        $subscriptions = $this->stripe->subscriptions->all(['customer' => $customer_id, 'status' => 'active']);
+        $subscriptions = $this->stripe->subscriptions->all(['customer' => $customer_id]);
         $subscription = $this->stripe->subscriptions->cancel($subscriptions->data[0]->id);
-        return !empty($subscription->canceled_at);
+        return $subscription->status === 'canceled'? true : false;
     }
 
     public function userAllDetail(string $customer_id) : array
@@ -153,10 +153,24 @@ class PaymentService
                 'brand'      => Str::upper($paymentMethod->card->brand),
                 'expiration' => $paymentMethod->card->exp_month . '/' . $paymentMethod->card->exp_year,
                 'last4'      => $paymentMethod->card->last4,
+                'id'         => $paymentMethod->id,
             ];
             $data[$key] = $card;
         }
         return $data;
+    }
+
+    public function defaultPaymentMethod(string $payment_method_id, string $customer_id)
+    {
+        $data = [
+            'invoice_settings' => ['default_payment_method' => $payment_method_id]
+        ];
+        $this->stripe->customers->update($customer_id, $data);
+    }
+
+    public function deletePaymentMethod(string $payment_method_id)
+    {
+        $this->stripe->paymentMethods->detach($payment_method_id);
     }
 
     public function dataPaymentIntentByCustomer(string $customer_id) : array

@@ -41,6 +41,8 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::get('payment-invoice-detail', 'PaymentController@detailInvoice');
     Route::get('cancel-subscription', 'PaymentController@cancelSubscription');
     Route::post('new-payment-method', 'PaymentController@newPaymentMethod');
+    Route::put('default-payment-method', 'PaymentController@defaultPaymentMethod');
+    Route::delete('delete-payment-method/{id}', 'PaymentController@deletePaymentMethod');
 
 
     Route::resources(
