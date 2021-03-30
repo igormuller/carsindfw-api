@@ -95,8 +95,17 @@ class PaymentService
                 'exp_year'  => $expiration[1],
                 'cvc'       => $data['card_cvv'],
             ],
+            'billing_details' => [
+                'name' => $data['card_name']
+            ]
         ];
         return $paymentMethodData;
+    }
+
+    public function attachCardInCustomer(string $payment_method_id, string $customer_id) : PaymentMethod
+    {
+        $paymentMethod = $this->stripe->paymentMethods->attach($payment_method_id, ['customer' => $customer_id]);
+        return $paymentMethod;
     }
 
     public function cancelSubscriptionByCustomer(string $customer_id) : bool

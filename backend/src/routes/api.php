@@ -40,6 +40,7 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::get('payment-subscription-detail', 'PaymentController@detailSubscription');
     Route::get('payment-invoice-detail', 'PaymentController@detailInvoice');
     Route::get('cancel-subscription', 'PaymentController@cancelSubscription');
+    Route::post('new-payment-method', 'PaymentController@newPaymentMethod');
 
 
     Route::resources(

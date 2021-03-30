@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TypeEnum;
+use App\Http\Requests\PaymentMethodRequest;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Exception\CardException;
 
 class PaymentController extends Controller
 {
@@ -62,6 +64,19 @@ class PaymentController extends Controller
     {
         $user = Auth::user();
         return $this->service->dataInvoicesByCustomer($user->company->stripe_id);
+    }
+
+    public function newPaymentMethod(PaymentMethodRequest $request)
+    {
+        try {
+            $paymentMethod = $this->service->createPaymentMethod($request->all());
+
+            $user = Auth::user();
+            $this->service->attachCardInCustomer($paymentMethod->id, $user->company->stripe_id);
+            return response('Payment created!' . $paymentMethod);
+        } catch (CardException $e) {
+            return response(['message' => $e->getMessage()], 402);
+        }
     }
 
     public function webhook(Request $request)
