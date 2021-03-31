@@ -130,12 +130,13 @@ class PaymentService
     {
         $customer = $this->stripe->customers->retrieve($customer_id);
         $service  = new CompanyService();
-        $data['plan_type'] = $service->detailByPlanType($user->company);
-        $data['last_plan'] = $service->detailLastPlan($user->company);
-        $data['plans']     = $service->detailByPlans($user->company);
-        $data['email']     = $customer->email;
-        $data['name']      = $customer->name;
-        $data['status']    = TypeEnum::getCompanyStatusName($user->company->status);
+        $data['plan_type']    = $service->detailByPlanType($user->company);
+        $data['last_plan']    = $service->detailLastPlan($user->company);
+        $data['plans']        = $service->detailByPlans($user->company);
+        $data['email']        = $customer->email;
+        $data['name']         = $customer->name;
+        $data['status']       = $user->company->status;
+        $data['status_front'] = TypeEnum::getCompanyStatusName($user->company->status);
         return $data;
     }
 
