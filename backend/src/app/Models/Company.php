@@ -52,6 +52,11 @@ class Company extends Model
         return $this->belongsTo("App\Models\PlanType");
     }
 
+    public function users()
+    {
+        return $this->belongsTo("App\Models\User");
+    }
+
     public function thisType()
     {
         $type = $this->type;

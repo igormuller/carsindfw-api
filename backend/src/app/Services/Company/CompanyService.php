@@ -59,4 +59,12 @@ class CompanyService
     {
         return $company->planType;
     }
+
+    public function emailToSend(Company $company) : string
+    {
+        if ($company->type === 'dealer') {
+            return $company->dealer->getEmailToSend();
+        }
+        return $company->person->getEmailToSend();
+    }
 }

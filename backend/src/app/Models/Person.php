@@ -29,6 +29,11 @@ class Person extends Model
         return $this->hasOne('App\Models\Address','company_id','company_id');
     }
 
+    public function users()
+    {
+        return $this->hasMany('App\Models\User', 'company_id', 'company_id');
+    }
+
     //------------------------------//
     //          SCOPES              //
     //------------------------------//
@@ -37,4 +42,8 @@ class Person extends Model
     //------------------------------//
     //          FUNCTIONS           //
     //------------------------------//
+    public function getEmailToSend() : string
+    {
+        return $this->users->first()->email;
+    }
 }

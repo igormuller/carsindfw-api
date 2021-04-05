@@ -51,6 +51,11 @@ class Dealer extends Model
         return $this->hasMany("App\Models\GalleryDealer");
     }
 
+    public function users()
+    {
+        return $this->hasMany('App\Models\User', 'company_id', 'company_id');
+    }
+
     //------------------------------//
     //          SCOPES              //
     //------------------------------//
@@ -59,4 +64,11 @@ class Dealer extends Model
     //------------------------------//
     //          FUNCTIONS           //
     //------------------------------//
+    public function getEmailToSend() : string
+    {
+        if (empty($this->email)) {
+            return $this->users->first()->email;
+        }
+        return $this->email;
+    }
 }
