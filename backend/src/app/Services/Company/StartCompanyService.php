@@ -73,13 +73,14 @@ class StartCompanyService
         if ($data['type'] === 'person') {
             $amount = number_format($type->value, 2, '', '');
             try {
-                $paymentIntent = $paymentService->cratePaymentIntent($amount, $customerPayment->id, $paymentMethod->id);
+                $paymentIntent = $paymentService->cratePaymentIntent(
+                    $amount, $customerPayment->id, $paymentMethod->id, ['description' => $type->description]);
                 $this->startPlan($company->id, $data['plan_type_id']);
             } catch (\Exception $e) {
                 $company->status = TypeEnum::COMPANY_STATUS_WARNING_PAYMENT;
             }
         } else {
-            $this->startPlan($company->id, 1);
+            $this->startPlan($company->id, $data['plan_type_id']);
             $paymentService->createSubscription($customerPayment->id, $type);
         }
 

@@ -71,12 +71,13 @@ class PaymentService
         return $customerData;
     }
 
-    public function cratePaymentIntent(int $amount, string $customer_id, string $payment_method_id)
+    public function cratePaymentIntent(int $amount, string $customer_id, string $payment_method_id, array $options = [])
     {
         return $this->stripe->paymentIntents->create([
             'amount' => $amount,
             'currency' => 'usd',
             'customer' => $customer_id,
+            'description' => $options['description']?? '',
             'payment_method' => $payment_method_id,
             'payment_method_types' => ['card'],
             'off_session' => true,
@@ -108,11 +109,55 @@ class PaymentService
         return $paymentMethod;
     }
 
+    public function changeSubscription(PlanType $planType, string $subscription_id) : Subscription
+    {
+        $items = $this->stripe->subscriptionItems->all(['subscription' => $subscription_id]);
+        $subscription = $this->stripe->subscriptions->update($subscription_id, [
+            'items' => [['price' => $planType->stripe_id]],
+        ]);
+        foreach ($items->data as $item) {
+            $this->stripe->subscriptionItems->delete($item->id);
+        }
+        return $subscription;
+    }
+
     public function cancelSubscriptionByCustomer(string $customer_id) : bool
     {
         $subscriptions = $this->stripe->subscriptions->all(['customer' => $customer_id]);
         $subscription = $this->stripe->subscriptions->cancel($subscriptions->data[0]->id);
         return $subscription->status === 'canceled'? true : false;
+    }
+
+    public function getSubscriptionsByCustomer(string $customer_id, array $options = [])
+    {
+        $filter = ['customer' => $customer_id];
+        if (!empty($options)) {
+            $filter = array_merge($filter, $options);
+        }
+
+        return $this->stripe->subscriptions->all($filter);
+    }
+
+    public function getFirstSubscription(string $customer_id, array $options = []) :? Subscription
+    {
+        $subscription = $this->getSubscriptionsByCustomer($customer_id, $options);
+        if (empty($subscription->data)) {
+            return null;
+        }
+        return $subscription->data[0];
+    }
+
+    public function defaultPaymentMethod(string $payment_method_id, string $customer_id)
+    {
+        $data = [
+            'invoice_settings' => ['default_payment_method' => $payment_method_id]
+        ];
+        $this->stripe->customers->update($customer_id, $data);
+    }
+
+    public function deletePaymentMethod(string $payment_method_id)
+    {
+        $this->stripe->paymentMethods->detach($payment_method_id);
     }
 
     public function userAllDetail(string $customer_id) : array
@@ -140,6 +185,12 @@ class PaymentService
         return $data;
     }
 
+    public function getPaymentMethodDefault(string $customer_id) : string
+    {
+        $customer             = $this->stripe->customers->retrieve($customer_id);
+        return $customer->invoice_settings->default_payment_method;
+    }
+
     public function dataPaymentMethodByCustomer(string $customer_id) : array
     {
         $data = [];
@@ -161,19 +212,6 @@ class PaymentService
         return $data;
     }
 
-    public function defaultPaymentMethod(string $payment_method_id, string $customer_id)
-    {
-        $data = [
-            'invoice_settings' => ['default_payment_method' => $payment_method_id]
-        ];
-        $this->stripe->customers->update($customer_id, $data);
-    }
-
-    public function deletePaymentMethod(string $payment_method_id)
-    {
-        $this->stripe->paymentMethods->detach($payment_method_id);
-    }
-
     public function dataPaymentIntentByCustomer(string $customer_id) : array
     {
         $data = [];
@@ -185,7 +223,7 @@ class PaymentService
                 'canceled_at'         => $this->formatDate($paymentIntent->canceled_at),
                 'cancellation_reason' => $paymentIntent->cancellation_reason,
                 'created'             => $this->formatDate($paymentIntent->created),
-                'description'         => $paymentIntent->statement_descriptor,
+                'description'         => $paymentIntent->description,
                 'status'              => $paymentIntent->status,
             ];
             $data[$key] = $aux;

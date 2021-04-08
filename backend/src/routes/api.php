@@ -25,6 +25,7 @@ Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
 Route::post('register-interest', 'InterestController@register');
 Route::get('verify-token/{id}', 'UserController@checkVerifyToken');
 Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
+Route::get('list-plan-types', 'PlanTypeController@listPlanTypes');
 
 Route::middleware(['auth:api','verified'])->group(function () {
 
@@ -43,6 +44,8 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::post('new-payment-method', 'PaymentController@newPaymentMethod');
     Route::put('default-payment-method', 'PaymentController@defaultPaymentMethod');
     Route::delete('delete-payment-method/{id}', 'PaymentController@deletePaymentMethod');
+    Route::post('contract-new-plan', 'PaymentController@contractNewPlan');
+    Route::post('change-subscription', 'PaymentController@changeSubscription');
 
 
     Route::resources(
