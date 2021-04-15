@@ -24,7 +24,7 @@ class CompanyService
         $entity->type = $company->type;
         if ($company->type === 'dealer') {
             $galleryDealer = new GalleryDealerService();
-            $entity->profile_url = Storage::url($entity->profile_path);
+            $entity->profile_url = !empty($entity->profile_path) ? Storage::url($entity->profile_path) : null;
             $entity->gallery = $galleryDealer->getGalleryData($entity);
         }
         return $entity->load(
