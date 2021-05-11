@@ -62,6 +62,7 @@ class AdvertisementService
         $data = $data->map(function ($item) {
             $item               = $this->repository->getEntityData($item);
             $item->photo        = $this->repository->getURLRandomPhoto($item);
+            $item->gallery      = $this->repository->getGalleryData($item);
             $item->company_data = $this->repository->getCompanyData($item);
             return $item;
         });
