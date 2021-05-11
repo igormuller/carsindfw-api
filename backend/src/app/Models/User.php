@@ -40,6 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo("App\Models\Company");
     }
 
+    public function address()
+    {
+        return $this->hasOne('App\Models\Address','company_id','company_id');
+    }
+
     //------------------------------//
     //          SCOPES              //
     //------------------------------//

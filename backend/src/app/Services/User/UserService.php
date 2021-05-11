@@ -4,6 +4,7 @@ namespace App\Services\User;
 
 use App\Mail\EmailVerifyToken;
 use App\Models\User;
+use App\Repositories\AddressRepository;
 use App\Repositories\UserRepository;
 use App\Services\General\StorageService;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,18 @@ class UserService
             $data['profile_path'] = $profile_path;
         }
 
+        if (!empty($data['phone']) && $user->company->type === 'person') {
+            $company = $user->company->person;
+            $company->phone = $data['phone'];
+            $company->save();
+        }
+
+        if (!empty($data['address'])) {
+            $addressRepository = new AddressRepository();
+            $address = $user->address;
+            $addressRepository->update($address, $data['address']);
+        }
+
         $user->update($data);
         return $this->detail($user);
     }
@@ -66,6 +79,13 @@ class UserService
     {
         $storage = new StorageService();
         $user->profile_url = !empty($user->profile_path) ? $storage->getUrl($user->profile_path) : null;
+        $user->address = $user->load(
+            [
+                'company',
+                'address',
+                'address.city',
+            ]
+        );
 
         return $user;
     }

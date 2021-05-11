@@ -26,6 +26,8 @@ class CompanyService
             $galleryDealer = new GalleryDealerService();
             $entity->profile_url = !empty($entity->profile_path) ? Storage::url($entity->profile_path) : null;
             $entity->gallery = $galleryDealer->getGalleryData($entity);
+        } else {
+            $entity->email = $company->users->first()->email;
         }
         return $entity->load(
             [

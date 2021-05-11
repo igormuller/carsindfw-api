@@ -54,7 +54,7 @@ class Company extends Model
 
     public function users()
     {
-        return $this->belongsTo("App\Models\User");
+        return $this->hasMany("App\Models\User");
     }
 
     public function thisType()
