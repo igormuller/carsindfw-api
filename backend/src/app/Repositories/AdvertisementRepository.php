@@ -64,13 +64,16 @@ class AdvertisementRepository extends BaseRepository
         $entity->transmission_front = $entity->transmission . " - " .
                                       EnumCarModelDescription::getTransmissionTypeName($entity->transmission_type);
         $entity->features           = !empty($entity->features) ? explode(',', $entity->features) : null;
-        $entity->show_name = $entity->year.' '.$entity->make_name.' '.$entity->model_name.' '.$entity->drive_type;
+        $entity->type_front         = ucfirst($entity->type);
+        $entity->show_name          = $entity->year . ' ' . $entity->make_name . ' ' . $entity->model_name;
+        $entity->name_detail_front  = ucfirst($entity->color_ext) . ' / ' . $entity->engine . ' / ' .
+                                      $entity->drive_type;
         return $entity;
     }
 
-    public function getCompanyData(Advertisement $entity): array
+    public function getCompanyData(Advertisement $entity)
     {
-        $type = $entity->company->type;
-        return $entity->company->$type->toArray();
+        $company = $entity->company->thisType();
+        return $company->load('address', 'address.state', 'address.city');
     }
 }
