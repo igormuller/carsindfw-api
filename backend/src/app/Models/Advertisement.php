@@ -60,7 +60,7 @@ class Advertisement extends Model
 
     public function carDescription()
     {
-        return $this->belongsTo("App\Models\CarModelDescription");
+        return $this->belongsTo("App\Models\CarModelDescription", 'car_model_description_id');
     }
 
     public function gallery()

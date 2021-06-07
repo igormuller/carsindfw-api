@@ -68,7 +68,7 @@ class AdvertisementRepository extends BaseRepository
         $entity->show_name          = $entity->year . ' ' . $entity->make_name . ' ' . $entity->model_name;
         $entity->name_detail_front  = ucfirst($entity->color_ext) . ' / ' . $entity->engine . ' / ' .
                                       $entity->drive_type;
-        return $entity;
+        return $entity->load('carDescription');
     }
 
     public function getCompanyData(Advertisement $entity)
