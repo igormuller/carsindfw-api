@@ -56,9 +56,7 @@ class InterestService
         $data['link'] = env('FRONT_URL').'/car-detail/'.$interest->advertisement->id;
 
         $company = $interest->advertisement->company;
-        $companyType = $company->thisType();
-
-        Mail::to($companyType->email)->send(new RegisterInterestEmail($data));
+        Mail::to($company->getEmail())->send(new RegisterInterestEmail($data));
         return ['email_send'];
     }
 }

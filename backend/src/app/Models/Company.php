@@ -80,4 +80,12 @@ class Company extends Model
         $data['advertisements'] = $this->advertisement;
         return $data;
     }
+
+    public function getEmail()
+    {
+        if ($this->type === 'dealer') {
+            return $this->email;
+        }
+        return $this->users->first()->email;
+    }
 }
