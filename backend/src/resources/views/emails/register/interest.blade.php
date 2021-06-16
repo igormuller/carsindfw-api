@@ -340,6 +340,23 @@
                             </td>
                         </tr>
                     </table>
+                    <table>
+                        <tr>
+                            <td>Copy abaut proposal:</td>
+                        </tr>
+                        <tr>
+                            <td>Name: {{ $data['name'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone: {{ $data['phone'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>E-mail: {{ $data['email'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Offer: {{ $data['description'] }}</td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
