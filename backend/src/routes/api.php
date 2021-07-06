@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('check-vin/{vin_number}', 'AdvertisementController@vinCheck');
 Route::post('new-company', 'CompanyController@start');
+Route::get('get-data-sites', 'CompanyController@getDataOtherSites');
 Route::get('all-makes', 'CarMakeController@index');
 Route::get('search-makes', 'CarMakeController@searchMakes');
 Route::get('model-by-make', 'CarModelController@getModelsByMake');
