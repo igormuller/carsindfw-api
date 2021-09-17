@@ -151,6 +151,26 @@ class PaymentController extends Controller
         }
     }
 
+    public function getPromotionCode(Request $request)
+    {
+        $promotion = $this->service->promotionCode($request->promotion_code);
+
+        if (empty($promotion)) {
+            return response(['error' => 'Promotion code not found!!'], 404);
+        }
+
+        $amount = empty($promotion->coupon->amount_off) ? null :
+            substr_replace($promotion->coupon->amount_off, '.', (strlen($promotion->coupon->amount_off) - 2), 0);
+        $data = [
+            'name'           => $promotion->coupon->name,
+            'promotion_code' => $promotion->code,
+            'amount_off'     => $amount,
+            'percent_off'    => $promotion->coupon->percent_off,
+            'duration'       => $promotion->coupon->duration_in_months,
+        ];
+        return response(['promotion' => $data]);
+    }
+
     public function webhook(Request $request)
     {
         return "teste";

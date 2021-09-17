@@ -26,6 +26,14 @@ Route::post('register-interest', 'InterestController@register');
 Route::get('verify-token/{id}', 'UserController@checkVerifyToken');
 Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
 Route::get('list-plan-types', 'PlanTypeController@listPlanTypes');
+Route::get('promotion-code/{promotion_code}', 'PaymentController@getPromotionCode');
+
+Route::middleware('access-broker')->prefix('broker')->group(function () {
+    Route::get('teste', function () {
+       dd("aqui");
+    });
+    Route::get('detail', 'BrokerController@detail');
+});
 
 Route::middleware(['auth:api','verified'])->group(function () {
 

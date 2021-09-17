@@ -81,7 +81,11 @@ class StartCompanyService
             }
         } else {
             $this->startPlan($company->id, $data['plan_type_id']);
-            $paymentService->createSubscription($customerPayment->id, $type);
+            $dataSubscription = [
+                'customer_id'    => $customerPayment->id,
+                'promotion_code' => $data['promotion_code'] ?? null,
+            ];
+            $paymentService->createSubscription($dataSubscription, $type);
         }
 
         $company->stripe_id = $customerPayment->id;

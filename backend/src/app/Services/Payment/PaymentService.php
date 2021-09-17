@@ -9,8 +9,11 @@ use App\Services\Company\CompanyService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Stripe\Collection;
 use Stripe\Customer;
 use Stripe\PaymentMethod;
+use Stripe\PromotionCode;
+use Stripe\Service\PromotionCodeService;
 use Stripe\StripeClient;
 use Stripe\Subscription;
 
@@ -22,6 +25,11 @@ class PaymentService
     {
         $key = env('STRIPE_KEY_SECRET');
         $this->stripe = new StripeClient($key);
+    }
+
+    public function promotionCode(string $promotionCode)
+    {
+        return $this->stripe->promotionCodes->all(["code"=>$promotionCode])->first();
     }
 
     public function createCustomer(array $data, PaymentMethod $paymentMethod) : Customer
@@ -36,13 +44,20 @@ class PaymentService
         return $this->stripe->paymentMethods->create($data);
     }
 
-    public function createSubscription(string $customer, PlanType $planType) : Subscription
+    public function createSubscription(array $object, PlanType $planType) : Subscription
     {
         $data = [
-            'customer'          => $customer,
+            'customer'          => $object['customer_id'],
             'items'             => [['price' => $planType->stripe_id]],
             'trial_period_days' => $planType->trial_period_days ?? 0,
         ];
+
+        if (!empty($object['promotion_code'])) {
+            $promotion = $this->promotionCode($object['promotion_code']);
+            if (!empty($promotion)) {
+                $data['promotion_code'] = $promotion->id;
+            }
+        }
         return $this->stripe->subscriptions->create($data);
     }
 
