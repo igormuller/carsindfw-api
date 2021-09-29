@@ -84,7 +84,7 @@ class Company extends Model
     public function getEmail()
     {
         if ($this->type === 'dealer') {
-            return $this->email;
+            return $this->dealer->email;
         }
         return $this->users->first()->email;
     }
