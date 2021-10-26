@@ -55,13 +55,14 @@ class AdvertisementService
         $advertisements = $this->repository->getLastCreatedAt(6);
         $data = [];
         foreach ($advertisements as $item) {
-            $aux = [];
-            $aux['photo'] = $this->repository->getURLPhoto($item);
-            $aux['make_name'] = $item->carMake->name;
-            $aux['model_name'] = $item->carModel->name;
-            $aux['trim'] = $item->trim;
+            $aux                 = [];
+            $aux['id']           = $item->id;
+            $aux['photo']        = $this->repository->getURLPhoto($item);
+            $aux['make_name']    = $item->carMake->name;
+            $aux['model_name']   = $item->carModel->name;
+            $aux['trim']         = $item->trim;
             $aux['company_name'] = $item->company->getName();
-            $data[] = $aux;
+            $data[]              = $aux;
         }
         return $data;
     }
