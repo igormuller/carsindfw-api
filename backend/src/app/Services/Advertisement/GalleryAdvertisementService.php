@@ -21,7 +21,7 @@ class GalleryAdvertisementService
 
     public function find(int $id) : GalleryAdvertisement
     {
-        $this->repository->findOrFail($id);
+        return $this->repository->findOrFail($id);
     }
 
     public function uploadGallery(array $images, Advertisement $advertisement) : Collection
@@ -47,6 +47,20 @@ class GalleryAdvertisementService
         });
     }
 
+    public function galleryData(Collection $gallery)
+    {
+        return $gallery->map(function ($item) {
+            $item->url = $this->storage->getURL($item->path);
+            return $item;
+        });
+    }
+
+    public function getGalerry(int $advertisemtn_id) : Collection
+    {
+        $images = $this->repository->all($advertisemtn_id);
+        return $this->galleryData($images);
+    }
+
     public function removeDiference(array $images, Advertisement $advertisement)
     {
         $galleryAdvertisement = $advertisement->gallery;
@@ -65,5 +79,17 @@ class GalleryAdvertisementService
     {
         $this->storage->delete($image->path);
         $image->delete();
+    }
+
+    public function setDefault(GalleryAdvertisement $image)
+    {
+        $imageDefault = $this->repository->getDefault($image->advertisement_id);
+        if (!empty($imageDefault)) {
+            $imageDefault->default = false;
+            $imageDefault->save();
+        }
+
+        $image->default = true;
+        $image->save();
     }
 }

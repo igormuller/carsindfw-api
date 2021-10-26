@@ -9,6 +9,7 @@ class GalleryAdvertisement extends Model
     protected $fillable = [
         'advertisement_id',
         'name',
+        'default',
         'path',
         'description',
     ];

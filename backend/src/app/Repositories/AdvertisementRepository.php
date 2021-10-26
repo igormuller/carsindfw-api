@@ -38,21 +38,20 @@ class AdvertisementRepository extends BaseRepository
         return $this->entity->all()->sortByDesc('created_at')->take($limit);
     }
 
-    function getURLRandomPhoto(Advertisement $entity):? string
+    function getURLPhoto(Advertisement $entity):? string
     {
-        $photo = $entity->gallery->isNotEmpty()? $entity->gallery->random() : null;
-        if (!empty($photo)) {
-            $photo = Storage::url($photo->path);
-        }
-        return $photo;
+        $photo = $entity->gallery->sortByDesc('default')->first();
+        return !empty($photo) ? Storage::url($photo->path) : null;
     }
 
     public function getGalleryData(Advertisement $entity) : Collection
     {
-        return $entity->gallery->map(function ($item) {
+        $gallery = $entity->gallery->sortByDesc('default');
+        $mapped = $gallery->map(function ($item) {
             $item->url = Storage::url($item->path);
             return $item;
         });
+        return $mapped->values();
     }
 
     public function getEntityData(Advertisement $entity) : Advertisement
@@ -69,11 +68,5 @@ class AdvertisementRepository extends BaseRepository
         $entity->name_detail_front  = ucfirst($entity->color_ext) . ' / ' . $entity->engine . ' / ' .
                                       $entity->drive_type;
         return $entity->load('carDescription');
-    }
-
-    public function getCompanyData(Advertisement $entity)
-    {
-        $company = $entity->company->thisType();
-        return $company->load('address', 'address.state', 'address.city');
     }
 }

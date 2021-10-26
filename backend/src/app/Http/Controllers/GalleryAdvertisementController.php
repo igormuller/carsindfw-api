@@ -24,6 +24,18 @@ class GalleryAdvertisementController extends Controller
         return $this->service->uploadGallery($gallery, $advertisement);
     }
 
+    public function default($id)
+    {
+        $image = $this->service->find($id);
+        $this->service->setDefault($image);
+        return response('Picture set Default with Success!!!', 200);
+    }
+
+    public function getGallery($advertisement_id)
+    {
+        return $this->service->getGalerry($advertisement_id);
+    }
+
     public function destroy($id)
     {
         $image = $this->service->find($id);

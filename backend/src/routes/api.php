@@ -41,6 +41,8 @@ Route::middleware(['auth:api','verified'])->group(function () {
 
     Route::post('gallery-dealer/{dealer_id}', 'GalleryDealerController@store');
     Route::post('gallery-advertisement/{advertisement_id}', 'GalleryAdvertisementController@store');
+    Route::put('gallery-advertisement/{id}/default', 'GalleryAdvertisementController@default');
+    Route::get('gallery-advertisement/{advertisement_id}', 'GalleryAdvertisementController@getGallery');
 
     Route::get('payment-general-detail', 'PaymentController@detailGeneral');
     Route::get('payment-customer-detail', 'PaymentController@detailCustomer');

@@ -14,8 +14,15 @@ class GalleryAdvertisementRepository extends BaseRepository
         parent::__construct($this->entity);
     }
 
-    public function all()
+    public function all(int $advertisement_id)
     {
-        return $this->entity->all();
+        return $this->entity->where('advertisement_id', $advertisement_id)->orderBy('default', 'desc')->get();
+    }
+
+    public function getDefault(int $advertisement_id)
+    {
+        return $this->entity->where('advertisement_id', $advertisement_id)
+                            ->where('default', true)
+                            ->first();
     }
 }

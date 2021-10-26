@@ -56,13 +56,11 @@ class AdvertisementController extends Controller
     {
         $data = $request->all();
         $dataSearch = json_decode($data['dataSearch'],true);
-        $advertisements = $this->service->search($dataSearch);
-
-        $advertisements = $advertisements->paginate($data["paginate"]);
-
-        $advertisementsData = $this->service->collectionToShow(collect($advertisements->items()));
-        $advertisements->data = $advertisementsData->toArray();
-        return $advertisements;
+        $search = $this->service->search($dataSearch)->paginate($data["paginate"]);
+        $items = $search->items();
+        $search = $search->toArray();
+        $search['data'] = $this->service->collectionToShow($items);
+        return $search;
     }
 
     public function vinCheck($vin_number)

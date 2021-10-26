@@ -50,23 +50,29 @@ class AdvertisementService
         return $data;
     }
 
-    public function getLastCars() : Collection
+    public function getLastCars() : array
     {
-        $data = $this->repository->getLastCreatedAt(6);
-
-        return $this->collectionToShow($data);
+        $advertisements = $this->repository->getLastCreatedAt(6);
+        $data = [];
+        foreach ($advertisements as $item) {
+            $aux = [];
+            $aux['photo'] = $this->repository->getURLPhoto($item);
+            $aux['make_name'] = $item->carMake->name;
+            $aux['model_name'] = $item->carModel->name;
+            $aux['trim'] = $item->trim;
+            $aux['company_name'] = $item->company->getName();
+            $data[] = $aux;
+        }
+        return $data;
     }
 
-    public function collectionToShow(Collection $data) : Collection
+    public function collectionToShow($data)
     {
-        $data = $data->map(function ($item) {
-            $item               = $this->repository->getEntityData($item);
-            $item->photo        = $this->repository->getURLRandomPhoto($item);
-            $item->gallery      = $this->repository->getGalleryData($item);
-            $item->company_data = $this->repository->getCompanyData($item);
-            return $item;
-        });
-        return $data;
+        $advertisementData = [];
+        foreach ($data as $item) {
+            $advertisementData[] = $this->dataToShow($item);
+        }
+        return $advertisementData;
     }
 
     public function dataToShow(Advertisement $entity) : Advertisement
@@ -75,7 +81,7 @@ class AdvertisementService
 
         $companyService = new CompanyService();
         $data->company_data = $companyService->detail($entity->company);
-        $data->gallery = $this->repository->getGalleryData($data);
+        $data->gallery_data = $this->repository->getGalleryData($data);
 
         return $data;
     }

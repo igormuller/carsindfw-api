@@ -88,4 +88,10 @@ class Company extends Model
         }
         return $this->users->first()->email;
     }
+
+    public function getName()
+    {
+        $type = $this->type;
+        return $this->$type->name;
+    }
 }
