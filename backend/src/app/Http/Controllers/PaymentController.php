@@ -104,6 +104,35 @@ class PaymentController extends Controller
         }
     }
 
+    public function newSubscription(Request $request)
+    {
+        $request->validate(['plan' => 'required|integer|exists:plan_types,id']);
+        try {
+            $user = Auth::user();
+            $type = PlanType::find($request->plan);
+            $planService = new AdminPlanService();
+
+            $subscription = $this->service->getFirstSubscription($user->company->stripe_id, ['status' => 'active']);
+            if (empty($subscription)) {
+                $subscription = $this->service->getFirstSubscription($user->company->stripe_id, ['status' => 'trialing']);
+            }
+            if (!empty($subscription)) {
+                throw new InvalidScopeException('You already have a subscription!', 402);
+            }
+
+            $data = [
+                'customer_id' => $user->company->stripe_id
+            ];
+            $this->service->createSubscription($data, $type);
+
+            $newPlan = $planService->newPlan($type, $user->company);
+            return response(['new_plan' => $newPlan]);
+
+        } catch (ApiErrorException $e) {
+            return response(['message' => $e->getMessage()], 402);
+        }
+    }
+
     public function changeSubscription(Request $request)
     {
         $request->validate(['plan' => 'required|integer|exists:plan_types,id']);
