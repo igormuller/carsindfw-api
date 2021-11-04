@@ -6,5 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class CarModelDescription extends Model
 {
-    //
+    protected $fillable = [
+        'car_model_id',
+        'id_teolida',
+        'trim',
+        'year',
+        'body_type',
+        'seats',
+        'cylinder',
+        'cylinder_type',
+        'engine_size',
+        'horsepower',
+        'drive_type',
+        'transmission',
+        'transmission_type',
+        'fuel_type',
+        'epa_mileage_city',
+        'epa_mileage_street'
+    ];
 }

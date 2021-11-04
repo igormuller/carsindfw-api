@@ -58,6 +58,8 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::post('new-subscription', 'PaymentController@newSubscription');
     Route::post('change-subscription', 'PaymentController@changeSubscription');
 
+    Route::post('process-cars', 'CarMakeController@processCars');
+
 
     Route::resources(
         [

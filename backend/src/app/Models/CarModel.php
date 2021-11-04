@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CarModel extends Model
 {
-    protected $fillable = ['make_id','name'];
+    protected $fillable = ['car_make_id','name'];
 
     //------------------------------//
     //          RELATIONS           //

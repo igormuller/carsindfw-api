@@ -21,7 +21,7 @@ class CreateCarModelDescriptionsTable extends Migration
             $table->enum('body_type', ['convertible','coupe','hatchback','minivan','sedan','suv','truck','van','wagon']);
             $table->integer('seats')->nullable();
             $table->integer('cylinder')->nullable();
-            $table->enum('cylinder_type', ['l','v','w','flat','rotary'])->nullable();
+            $table->enum('cylinder_type', ['l','v','w','flat','rotary','i','inline'])->nullable();
             $table->decimal('engine_size', 2,1)->nullable();
             $table->integer('horsepower')->nullable();
             $table->enum('drive_type', ['AWD','4WD','FWD','RWD'])->nullable();
