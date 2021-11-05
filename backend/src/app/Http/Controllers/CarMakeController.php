@@ -34,14 +34,17 @@ class CarMakeController extends Controller
                 }
 
                 try {
-                    $carMake        = $serviceCar->findMake($data);
-                    $carModel       = $serviceCar->findModel($data, $carMake);
-                    $bodyType       = !empty($data[5]) ? $serviceCar->findBodyType($data) : null;
-                    $carDescription = $serviceCar->findDescription($data, $carModel, $bodyType);
+                    $carMake        = $serviceCar->findOrCreateMake($data);
+                    $carModel       = $serviceCar->findOrCreateModel($data, $carMake);
+                    $bodyType       = $serviceCar->findOrCreateBodyType($data);
+                    $carDescription = $serviceCar->updateOrCreateDescription($data, $carModel, $bodyType);
                 } catch (\Exception $e) {
-                    Log::info("data".json_encode($data));
+                    Log::info("row(".$i.") - data".json_encode($data));
                     Log::error($e->getMessage());
+                    Log::error('Line : ' .$e->getLine().' Archive: '.$e->getFile());
                 }
+
+                if (($i % 1000) === 0) Log::info("row(".$i.")");
 
                 $i++;
             }

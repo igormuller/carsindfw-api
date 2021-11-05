@@ -3,6 +3,7 @@
 namespace App\Services\Advertisement;
 
 use App\Models\Advertisement;
+use App\Models\CarModelDescription;
 use App\Repositories\AdvertisementRepository;
 use App\Services\Company\CompanyService;
 use Illuminate\Support\Collection;
@@ -44,9 +45,21 @@ class AdvertisementService
             $data['features'] = null;
         }
 
+        $carModelDescription = CarModelDescription::find($data['car_model_description_id']);
+        $data['year']              = $carModelDescription->year;
+        $data['trim']              = $carModelDescription->trim;
+        $data['body_type']         = $carModelDescription->bodyType->name;
+        $data['transmission']      = $carModelDescription->transmission;
+        $data['transmission_type'] = $carModelDescription->transmission_type;
+        $data['drive_type']        = $carModelDescription->drive_type;
+        $data['fuel_type']         = $carModelDescription->fuel_type;
+        $data['seats']             = $carModelDescription->seats;
+        $data['engine']            = $carModelDescription->engine_size . 'L ' .
+                                     $carModelDescription->cylinder_type . $carModelDescription->cylinder . ' ' .
+                                     $carModelDescription->horsepower . 'hp';
+
         $data['value']      = str_replace(',', '', $data['value']);
         $data['vin_number'] = strtoupper(str_replace(' ', '', $data['vin_number']));
-
         return $data;
     }
 

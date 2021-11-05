@@ -58,7 +58,7 @@ class AdvertisementRepository extends BaseRepository
     {
         $entity->make_name          = $entity->carMake->getName();
         $entity->model_name         = $entity->carModel->getName();
-        $entity->body_type_front    = EnumCarModelDescription::getBodyTypeName($entity->body_type);
+        $entity->body_type_front    = $entity->body_type;
         $entity->fuel_type_front    = EnumCarModelDescription::getFuelTypeName($entity->fuel_type);
         $entity->transmission_front = $entity->transmission . " - " .
                                       EnumCarModelDescription::getTransmissionTypeName($entity->transmission_type);

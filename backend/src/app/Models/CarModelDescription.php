@@ -11,7 +11,7 @@ class CarModelDescription extends Model
         'id_teolida',
         'trim',
         'year',
-        'body_type',
+        'body_type_id',
         'seats',
         'cylinder',
         'cylinder_type',
@@ -24,4 +24,9 @@ class CarModelDescription extends Model
         'epa_mileage_city',
         'epa_mileage_street'
     ];
+
+    public function bodyType()
+    {
+        return $this->belongsTo("App\Models\BodyType");
+    }
 }

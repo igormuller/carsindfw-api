@@ -2,8 +2,6 @@
 
 namespace App\Services\General;
 
-use App\Enums\EnumCarModelDescription;
-use App\Enums\TypeEnum;
 use App\Models\BodyType;
 use App\Models\CarMake;
 use App\Models\CarModel;
@@ -13,26 +11,41 @@ use Illuminate\Support\Str;
 
 class CreateCarService
 {
-    private $carMakes;
+    const TRANSMISSION_TYPE = [
+        'speed manual'                          => 'manual',
+        'speed automatic'                       => 'automatic',
+        'speed'                                 => 'automatic',
+        'continuously variable-speed automatic' => 'cvt',
+        'electrically variable-speed automatic' => 'evt',
+        'speed direct drive'                    => 'direct_drive',
+        'speed shiftable automatic'             => 'shiftable_automatic',
+        'speed automated manual'                => 'automated_manual',
+    ];
 
-    public function __construct()
+    const FUEL_TYPE = [
+        'diesel'               => 'diesel',
+        'electric'             => 'electric',
+        'electric (fuel cell)' => 'electric',
+        'flex-fuel (FFV)'      => 'flex_fuel',
+        'gas'                  => 'gas',
+        'hybrid'               => 'hybrid',
+        'natural gas (CNG)'    => 'natural_gas',
+    ];
+
+    const DRIVE_TYPE = [
+        'all wheel drive'   => 'AWD',
+        'four wheel drive'  => '4WD',
+        'front wheel drive' => 'FWD',
+        'rear wheel drive'  => 'RWD',
+    ];
+
+
+    public function findOrCreateMake(array $data)
     {
-        $this->carMakes = CarMake::all();
+        return CarMake::firstOrCreate(['name' => $data[1]]);
     }
 
-    public function findMake(array $data)
-    {
-        $carMake = $this->carMakes->where('name', $data[1])->first();
-        if (empty($carMake)) {
-            $newCarMake = new CarMake();
-            $newCarMake->name = $data[1];
-            $newCarMake->save();
-            return $newCarMake;
-        }
-        return $carMake;
-    }
-
-    public function findModel($data, $carMake)
+    public function findOrCreateModel($data, $carMake)
     {
         return CarModel::firstOrCreate(
             [
@@ -42,8 +55,10 @@ class CreateCarService
         );
     }
 
-    public function findBodyType($data)
+    public function findOrCreateBodyType($data)
     {
+        if (empty($data[5])) return null;
+
         return BodyType::firstOrCreate(
             [
                 'name' => $data[5],
@@ -52,97 +67,82 @@ class CreateCarService
         );
     }
 
-    public function findDescription($data, $carModel, $bodyType)
+    public function updateOrCreateDescription($data, $carModel, $bodyType)
     {
-        $drive_type = [
-            'all wheel drive'   => 'AWD',
-            'four wheel drive'  => '4WD',
-            'front wheel drive' => 'FWD',
-            'rear wheel drive'  => 'RWD',
-        ];
+        $transmission = $this->extractTransmission($data);
+        $fuelType     = $this->extractFuelType($data);
+        $epaMilage    = $this->extractEpaMilage($data);
+        $engine       = $this->extractEngine($data);
+        $cylinder = $this->extractCylinder($data);
 
-        $fuel_type = [
-            'diesel'               => 'diesel',
-            'electric'             => 'electric',
-            'electric (fuel cell)' => 'electric',
-            'flex-fuel (FFV)'      => 'flex_fuel',
-            'gas'                  => 'gas',
-            'hybrid'               => 'hybrid',
-            'natural gas (CNG)'    => 'natural_gas',
-        ];
-
-        $transmission_type = [
-            null => null,
-            'speed manual' => 'manual',
-            'speed automatic' => 'automatic',
-            'speed' => 'automatic',
-            'continuously variable-speed automatic' => 'cvt',
-            'electrically variable-speed automatic' => 'evt',
-            'speed direct drive' => 'direct_drive',
-            'speed shiftable automatic' => 'shiftable_automatic',
-            'speed automated manual' => 'automated_manual',
-        ];
-        $transmission = !empty($data[12]) ? explode('-', $data[12]) : [null, null];
-        $epaMilage = [
-            'city' => null,
-            'highway' => null
-        ];
-        if (!empty($data[14])) {
-            $auxEpa = explode('/', $data[14]);
-            $epaMilage['city'] = $auxEpa[0];
-            $epaMilage['highway'] = explode(' ', $auxEpa[1])[0];
-        }
-        $engine = null;
-        if (!empty($data[8])) {
-            $engine = str_replace(',', '.', $data[8]);
-            $engineAux = explode(' ', $engine);
-            if (sizeof($engineAux) > 1) {
-                $engine = $engineAux[0];
-            }
-        }
-        $update = [
-            'car_model_id'       => $carModel->id,
-            'id_teolida'         => $data[0],
-            'trim'               => $data[4],
-            'year'               => $data[3],
-            'body_type_id'       => !empty($bodyType) ? $bodyType->id : null,
-            'seats'              => !empty($data[6]) ? $data[6] : null,
-            'cylinder'           => !empty($data[7]) ? preg_replace("/[^\d]/", "", $data[7]) : null,
-            'cylinder_type'      => !empty($data[7]) ? trim(preg_replace("/[\d]/", "", $data[7])) : null,
-            'engine_size'        => $engine,
-            'horsepower'         => !empty($data[9]) ? $data[9] : null,
-            'drive_type'         => !empty($data[11]) ? $drive_type[$data[11]] : null,
-            'transmission'       => is_numeric($transmission[0]) ? $transmission[0] : null,
-            'transmission_type'  => $transmission_type[$transmission[1]],
-            'fuel_type'          => !empty($data[13]) ? $fuel_type[$data[13]] : null,
-            'epa_mileage_city'   => $epaMilage['city'],
-            'epa_mileage_street' => $epaMilage['highway'],
-        ];
-        $carDescription = CarModelDescription::where('car_model_id', $carModel->id)
-                                             ->where('trim', $data[4])
-                                             ->where('year', $data[3])
-                                             ->get();
-
-        if ($carDescription->isEmpty()) {
-            $newCarDescription = CarModelDescription::create($update);
-            return $newCarDescription;
-        }
-
-        if ($carDescription->count() === 1) {
-            $carDescription = $carDescription->first();
-            $carDescription->update($update);
-
-            return $carDescription;
-        }
-
-        if ($carDescription->count() > 1) {
-            $carDescription = $carDescription->first();
-            $carDescription->update($update);
-            Log::info('duplicate: '.$data[0]);
-            return $carDescription;
-        }
-
-        return $carDescription;
+        return CarModelDescription::updateOrCreate(
+            [
+                'car_model_id' => $carModel->id,
+                'id_teolida'   => $data[0],
+                'trim'         => $data[4],
+                'year'         => $data[3],
+            ],[
+                'body_type_id'       => !empty($bodyType) ? $bodyType->id : null,
+                'seats'              => !empty($data[6]) ? $data[6] : null,
+                'cylinder'           => $cylinder['cylinder'],
+                'cylinder_type'      => $cylinder['cylinder_type'],
+                'engine_size'        => $engine,
+                'horsepower'         => !empty($data[9]) ? $data[9] : null,
+                'drive_type'         => !empty($data[11]) ? self::DRIVE_TYPE[$data[11]] : null,
+                'transmission'       => $transmission['transmission'],
+                'transmission_type'  => $transmission['transmission_type'],
+                'fuel_type'          => $fuelType,
+                'epa_mileage_city'   => $epaMilage['city'],
+                'epa_mileage_street' => $epaMilage['highway'],
+            ]
+        );
     }
 
+    private function extractTransmission($data)
+    {
+        if (empty($data[12])) return ['transmission' => null, 'transmission_type' => null];
+
+        $aux = explode('-', $data[12]);
+        return [
+            'transmission'      => is_numeric($aux[0]) ? $aux[0] : null,
+            'transmission_type' => self::TRANSMISSION_TYPE[$aux[1]],
+        ];
+    }
+
+    private function extractFuelType($data)
+    {
+        return !empty($data[13]) ? self::FUEL_TYPE[$data[13]] : null;
+    }
+
+    private function extractEpaMilage($data)
+    {
+        if (empty($data[14])) return ['city' => null, 'highway' => null];
+
+        $auxEpa = explode('/', $data[14]);
+        return [
+            'city' => $auxEpa[0],
+            'highway' => explode(' ', $auxEpa[1])[0]
+        ];
+    }
+
+    private function extractEngine($data)
+    {
+        if (empty($data[8])) return null;
+
+        $engine = str_replace(',', '.', $data[8]);
+        $engineAux = explode(' ', $engine);
+        if (sizeof($engineAux) > 1) {
+            $engine = $engineAux[0];
+        }
+        return $engine;
+    }
+
+    private function extractCylinder($data)
+    {
+        if (empty($data[7])) return ['cylinder' => null, 'cylinder_type' => null];
+        return [
+            'cylinder'      => preg_replace("/[^\d]/", "", $data[7]),
+            'cylinder_type' => trim(preg_replace("/[\d]/", "", $data[7])),
+        ];
+    }
 }
