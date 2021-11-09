@@ -77,11 +77,11 @@ class CreateCarService
 
         return CarModelDescription::updateOrCreate(
             [
-                'car_model_id' => $carModel->id,
                 'id_teolida'   => $data[0],
-                'trim'         => $data[4],
-                'year'         => $data[3],
             ],[
+                'car_model_id'       => $carModel->id,
+                'trim'               => $data[4],
+                'year'               => $data[3],
                 'body_type_id'       => !empty($bodyType) ? $bodyType->id : null,
                 'seats'              => !empty($data[6]) ? $data[6] : null,
                 'cylinder'           => $cylinder['cylinder'],

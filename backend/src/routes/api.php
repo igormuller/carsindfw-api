@@ -28,6 +28,8 @@ Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
 Route::get('list-plan-types', 'PlanTypeController@listPlanTypes');
 Route::get('promotion-code/{promotion_code}', 'PaymentController@getPromotionCode');
 
+Route::post('process-cars', 'CarMakeController@processCars');
+
 Route::middleware('access-broker')->prefix('broker')->group(function () {
     Route::get('teste', function () {
        dd("aqui");
@@ -58,7 +60,7 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::post('new-subscription', 'PaymentController@newSubscription');
     Route::post('change-subscription', 'PaymentController@changeSubscription');
 
-    Route::post('process-cars', 'CarMakeController@processCars');
+
 
 
     Route::resources(
