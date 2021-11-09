@@ -27,8 +27,7 @@ Route::get('verify-token/{id}', 'UserController@checkVerifyToken');
 Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
 Route::get('list-plan-types', 'PlanTypeController@listPlanTypes');
 Route::get('promotion-code/{promotion_code}', 'PaymentController@getPromotionCode');
-
-Route::post('process-cars', 'CarMakeController@processCars');
+//Route::post('process-cars', 'CarMakeController@processCars');
 
 Route::middleware('access-broker')->prefix('broker')->group(function () {
     Route::get('teste', function () {
@@ -59,9 +58,6 @@ Route::middleware(['auth:api','verified'])->group(function () {
     Route::post('contract-new-plan', 'PaymentController@contractNewPlan');
     Route::post('new-subscription', 'PaymentController@newSubscription');
     Route::post('change-subscription', 'PaymentController@changeSubscription');
-
-
-
 
     Route::resources(
         [

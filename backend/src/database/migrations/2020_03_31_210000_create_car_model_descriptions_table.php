@@ -27,7 +27,7 @@ class CreateCarModelDescriptionsTable extends Migration
             $table->enum('drive_type', ['AWD','4WD','FWD','RWD'])->nullable();
             $table->integer('transmission')->nullable();
             $table->enum('transmission_type',['manual','automatic','cvt','evt','direct_drive','shiftable_automatic','automated_manual'])->nullable();
-            $table->enum('fuel_type',['gas','diesel','electric','hybrid','flex_fuel','natural_gas']);
+            $table->enum('fuel_type',['gas','diesel','electric','hybrid','flex_fuel','natural_gas'])->nullable();
             $table->integer('epa_mileage_city')->nullable();
             $table->integer('epa_mileage_street')->nullable();
             $table->timestamps();
