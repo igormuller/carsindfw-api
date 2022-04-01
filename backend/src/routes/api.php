@@ -25,6 +25,8 @@ Route::get('lat-lng-maps', 'AddressController@getLatLngMapsGoogle');
 Route::post('register-interest', 'InterestController@register');
 Route::get('verify-token/{id}', 'UserController@checkVerifyToken');
 Route::get('new-verify-token/{email}', 'UserController@newVerifyToken');
+Route::post('password/forgot', 'UserController@forgotPassword')->name('passwords.sent');
+Route::post('password/reset', 'UserController@resetPassword');
 Route::get('list-plan-types', 'PlanTypeController@listPlanTypes');
 Route::get('promotion-code/{promotion_code}', 'PaymentController@getPromotionCode');
 //Route::post('process-cars', 'CarMakeController@processCars');

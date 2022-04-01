@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Services\User\UserService;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Laravel\Passport\Passport;
+use function GuzzleHttp\Promise\all;
 
 class UserController extends Controller
 {
@@ -52,6 +58,32 @@ class UserController extends Controller
         $user->save();
         $this->service->sendEmailVerify($user);
         return response(['message' => 'New token generate']);
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email'=>'required|email|exists:users,email']);
+        return Password::sendResetLink($request->all());
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|exists:password_resets,token',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        try {
+            $user = Password::getUser($request->all());
+            $user->password = Hash::make($request->password);
+            $user->save();
+            Password::deleteToken($user);
+
+            return response("Password Reset Success!", 200);
+        } catch (\Exception $exception) {
+            return response("Error ".$exception->getMessage(), $exception->getCode());
+        }
+
     }
 
     public function index()
