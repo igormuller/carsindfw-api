@@ -29,7 +29,15 @@ class StartCompanyService
 
     public function createWithUser(Array $data): Company
     {
-        $company = $this->create($data);
+        $type = PlanType::findOrFail($data['plan_type_id']);
+
+        if ($type->company_type === 'person') {
+            $company = $this->createPerson($data);
+        }
+
+        if ($type->company_type === 'dealer') {
+            $company = $this->createDealer($data);
+        }
 
         $data['company_id'] = $company->id;
         $userData = $data;
@@ -41,7 +49,23 @@ class StartCompanyService
         return $company;
     }
 
-    public function create(array $data)
+    public function createPerson(array $data)
+    {
+        $company = $this->repository->create($data);
+        $data['company_id'] = $company->id;
+
+        $this->createAddress($data);
+
+        $personService = new PersonService();
+        $data['name'] = $data['user_name'];
+        $personService->create($data);
+
+        $this->startPlan($company->id, $data['plan_type_id']);
+
+        return $company;
+    }
+
+    public function createDealer(array $data)
     {
         $paymentService = new PaymentService();
         $paymentMethod = $paymentService->createPaymentMethod($data);
@@ -55,7 +79,6 @@ class StartCompanyService
         $addressData['state_initials'] = $address->state->initials;
 
         $dataPayment = array_merge($data, ['address' => $addressData]);
-        $customerPayment = null;
         try {
             $customerPayment = $paymentService->createCustomer($dataPayment, $paymentMethod);
         } catch (CardException $e) {
@@ -68,25 +91,16 @@ class StartCompanyService
             throw new HttpException('402', 'Internal error, contact us to resolve this problem!');
         }
 
-        $this->createType($data);
+        $dealerService = new DealerService();
+        $dealerService->create($data);
+
         $type = PlanType::find($data['plan_type_id']);
-        if ($data['type'] === 'person') {
-            $amount = number_format($type->value, 2, '', '');
-            try {
-                $paymentIntent = $paymentService->cratePaymentIntent(
-                    $amount, $customerPayment->id, $paymentMethod->id, ['description' => $type->description]);
-                $this->startPlan($company->id, $data['plan_type_id']);
-            } catch (\Exception $e) {
-                $company->status = TypeEnum::COMPANY_STATUS_WARNING_PAYMENT;
-            }
-        } else {
-            $this->startPlan($company->id, $data['plan_type_id']);
-            $dataSubscription = [
-                'customer_id'    => $customerPayment->id,
-                'promotion_code' => $data['promotion_code'] ?? null,
-            ];
-            $paymentService->createSubscription($dataSubscription, $type);
-        }
+        $this->startPlan($company->id, $data['plan_type_id']);
+        $dataSubscription = [
+            'customer_id'    => $customerPayment->id,
+            'promotion_code' => $data['promotion_code'] ?? null,
+        ];
+        $paymentService->createSubscription($dataSubscription, $type);
 
         $company->stripe_id = $customerPayment->id;
         $company->save();
@@ -104,25 +118,6 @@ class StartCompanyService
         }
         $repository = new AddressRepository();
         return $repository->create($data);
-    }
-
-    private function createType(array $data)
-    {
-        if ($data['type'] === 'person') {
-            $personService = new PersonService();
-            $data['name'] = $data['user_name'];
-            $personService->create($data);
-        }
-
-        if ($data['type'] === 'dealer') {
-            $dealerService = new DealerService();
-            $dealerService->create($data);
-        }
-
-        if ($data['type'] === 'broker') {
-            $broker_service = new BrokerService();
-            $broker_service->create($data);
-        }
     }
 
     private function startPlan(int $company_id, int $type, array $option = [])

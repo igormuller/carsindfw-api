@@ -22,19 +22,19 @@ class NewCompanyWithUser extends FormRequest
             'phone'                => 'string|max:14',
             'zipcode'              => 'required|max:5',
             'plan_type_id'         => 'required|exists:plan_types,id',
-            'card_number'          => 'required',
-            'card_name'            => 'required',
-            'card_expiration_date' => 'required|date_format:m/y',
-            'card_cvv'             => 'required',
         ];
 
         if ($this->type === 'dealer') {
             $rules_dealer = [
-                'name'      => 'required',
-                'document'  => 'string|min:20|unique:dealers',
-                'site'      => 'string|max:100',
-                'instagram' => 'string|max:100',
-                'facebook'  => 'string|max:100',
+                'name'                 => 'required',
+                'document'             => 'string|min:20|unique:dealers',
+                'site'                 => 'string|max:100',
+                'instagram'            => 'string|max:100',
+                'facebook'             => 'string|max:100',
+                'card_number'          => 'required',
+                'card_name'            => 'required',
+                'card_expiration_date' => 'required|date_format:m/y',
+                'card_cvv'             => 'required',
             ];
             $rules = array_merge($rules, $rules_dealer);
         }
