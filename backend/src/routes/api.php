@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+/*
 Route::get('check-vin/{vin_number}', 'AdvertisementController@vinCheck');
 Route::post('new-company', 'CompanyController@start');
 Route::get('all-makes', 'CarMakeController@index');
-Route::get('search-makes', 'CarMakeController@searchMakes');
-Route::get('model-by-make', 'CarModelController@getModelsByMake');
+
+Route::post('model-by-make', 'CarModelController@getModelsByMake');
 Route::get('search-trim', 'CarModelDescriptionController@searchTrim');
 Route::get('years-by-model', 'CarModelDescriptionController@getYearsByModel');
 Route::get('category-by-model', 'CarModelDescriptionController@getCategoriesByModel');
@@ -72,4 +73,6 @@ Route::middleware(['auth:api','verified'])->group(function () {
             'users'          => 'UserController',
         ]
     );
+    
 });
+*/

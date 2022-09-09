@@ -14,10 +14,7 @@ class CarMakeController extends Controller
         return CarMake::all();
     }
 
-    public function searchMakes(Request $request)
-    {
-        return CarMake::orWhere('name', 'LIKE', '%' . $request->make . '%')->orWhere('id', $request->make)->get();
-    }
+    
 
     public function processCars(Request $request)
     {

@@ -20,7 +20,8 @@ class ContactUsController extends Controller
         );
 
         $emailSend = env('MAIL_SEND');
-        Mail::to($emailSend)->send(new ContactUs($request->all()));
+        //Mail::to($emailSend)->send(new ContactUs($request->all()));
+        Mail::to('josebrog@gmail.com')->send(new ContactUs($request->all()));
         return response('send email', 200);
     }
 }

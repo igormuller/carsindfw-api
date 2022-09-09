@@ -68,6 +68,13 @@ class Advertisement extends Model
         return $this->hasMany("App\Models\GalleryAdvertisement");
     }
 
+    public function getImageAttribute()
+    {
+        $image = \App\Models\GalleryAdvertisement::where('advertisement_id', $this->id)->orderBy('default', 'DESC')->limit('1')->first();
+        return $image;
+    }
+
+
     //------------------------------//
     //          SCOPES              //
     //------------------------------//
