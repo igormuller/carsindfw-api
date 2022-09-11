@@ -1,4 +1,5 @@
 <div class="car-view4-wrapper">
+  <a href="{{route('car-detail',['car' => $car->id])}}">
     <div class="car-view2 clearfix">
       <figure>
         @if (isset($car->image))
@@ -31,10 +32,11 @@
           </div>
           <div class="info3">
             <div class="txt7">
-              <a href="{{route('car-detail',['car' => $car->id])}}" class="btn-default btn3">VIEW DETAILS</a>
+              <a href="#" class="btn-default btn3">VIEW DETAILS</a>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </a>
   </div>

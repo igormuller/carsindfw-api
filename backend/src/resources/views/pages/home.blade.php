@@ -21,7 +21,7 @@
                 <div class="caption">
                   <div class="container">
                     <div class="txt1"><span>DEALER - SELL YOUR CARS</span></div>
-                    <div class="txt2">MAKE GREAT BUSINNES WITH US</div>
+                    <div class="txt2">GROW YOUR BUSINNES WITH US</div>
                     <div class="link2"><a href="details.html" class="slider-link2"><span>SEE DETAILS</span></a></div>
                   </div>
                 </div>
