@@ -18,7 +18,9 @@
                             <h3 class="title-font text-secondary mb-0 h4">Dealer Plan</h3>
                             <div class="d-flex align-items-start justify-content-center mb-0">
                                 <span class="mt-sm-2 fw-bolder display-30 display-sm-28 display-lg-26 me-1">$</span>
-                                <h4 class="display-3 mb-0 font-weight-600">399</h4>
+                                <h4 class="display-3 mb-0 font-weight-600 text-line-through mr-2">999</h4>
+                                <span class="mt-sm-2 fw-bolder display-30 display-sm-28 display-lg-26 me-1">$</span>
+                                <h4 class="display-3 mb-0 font-weight-600">499</h4>
                             </div>
                             <span class="align-self-end fw-bolder display-30 display-sm-28">For the dealer, very advertisements in one place.</span>
                         </div>

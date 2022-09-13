@@ -100,7 +100,7 @@
             <div class="row">
               <div class="col2">
                 <div id="slider-range-wrapper">
-                  <div class="txt" for="amount_min">PRICE RANGE</div>
+                  <label class="" for="amount_min">PRICE RANGE</label>
                   <div id="slider-range"></div>
                   <div class="clearfix">
                     <input type="text" id="amount_min" name="amount_min" title="Valor Mínimo" readonly>
@@ -108,7 +108,17 @@
                   </div>
                 </div>
               </div>
-              <div class="col3">
+              <div class="col2">
+                <div id="miles-slider-range-wrapper">
+                  <label class="" for="miles_min">MILEAGE</label>
+                  <div id="miles-slider-range"></div>
+                  <div class="clearfix">
+                    <input type="text" id="miles_min" name="miles_min" title="Miles Min" readonly>
+                    <input type="text" id="miles_max" name="miles_max" title="Miles Max" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col2 text-right">
                 <!--<div class="adv-serach"><a href="#">ADVANCED SEARCH</a></div>-->
                 <button type="submit" class="btn-default btn-form1-submit1"><span>SEARCH THE VEHICLE</span></button>
               </div>
@@ -125,7 +135,7 @@
   <div class="container-fluid">
       <div class="container">
           <div class="section-header">
-              <h2>Destaques</h2>
+              <h2>Highlights</h2>
           </div>
           <div class="row align-items-center category-slider category-slider-4">
             @foreach($listFeaturedAds as $itemFeaturedAds)

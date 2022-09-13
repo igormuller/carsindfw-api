@@ -71,7 +71,7 @@
               <div class="banner3">
                 <div class="top-info clearfix">
                   <div class="info1">
-                    <div class="txt1">Financing Offer</div>
+                    <div class="txt1">Estimate Financing</div>
                   </div>
                 </div>
                 <div class="txt2"></div>

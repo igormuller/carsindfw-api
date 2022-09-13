@@ -574,9 +574,9 @@ header {
 
 .booking .col2 {
     padding-left: 15px;
-    padding-right: 15px;
+    padding-right: 0px;
     float: left;
-    width: 60%;
+    width: 33%;
 }
 
 .booking .col3 {
@@ -588,9 +588,9 @@ header {
 }
 
 #slider-range-wrapper {
-    padding-left: 110px;
+    padding-left: 0px;
     position: relative;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 #slider-range-wrapper .txt {
     position: absolute;
@@ -606,7 +606,7 @@ header {
     border: 1px solid #eeeeee;
     height: 10px;
     background: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 #slider-range .ui-slider-range {
     background: #001f59;
@@ -645,9 +645,9 @@ header {
 }
 
 #miles-slider-range-wrapper {
-    padding-left: 110px;
+    padding-left: 0px;
     position: relative;
-    margin-top: 20px;
+    margin-top: 0px;
 }
 #miles-slider-range-wrapper .txt {
     position: absolute;
@@ -663,7 +663,7 @@ header {
     border: 1px solid #eeeeee;
     height: 10px;
     background: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 #miles-slider-range .ui-slider-range {
     background: #001f59;
@@ -877,11 +877,11 @@ header {
 /* ============================= select2 start ====================== */
 .form1 {
     display: block;
-    padding: 60px 60px 40px;
+    padding: 40px 60px 40px;
     position: relative;
 }
 .form1 label {
-    display: none;
+    text-transform: uppercase;
 }
 
 .select1_wrapper {
@@ -5172,7 +5172,14 @@ header {
 .mb-5 {
     margin-bottom: 5rem;
 }
+.mr-2 {
+    margin-right: 2rem;
+}
 
 .pt-6 {
     padding-top: 6rem;
+}
+
+.text-line-through {
+    text-decoration: line-through;
 }
