@@ -31,7 +31,7 @@
               @foreach ($latestAds as $footerAds)
               <div class="autos1 clearfix">
                 <div class="col-md-5">
-                <figure><img src="{{Storage::url($footerAds->image->path)}}" alt="{{$footerAds->trim}}" class="img-responsive"></figure>
+                <figure><img src="{{Storage::disk('s3')->url($footerAds->image->path)}}" alt="{{$footerAds->trim}}" class="img-responsive"></figure>
                 </div>
                 <div class="col-md-7 caption">
                   <div class="txt1">{{$footerAds->trim}}</div>
