@@ -3,7 +3,7 @@
     <div class="car-view2 clearfix">
       <figure>
         @if (isset($car->image))
-        <img src="{{Storage::url($car->image->path)}}" alt="{{$car->trim}}" class="img-responsive">
+        <img src="{{Storage::disk('s3')->url($car->image->path)}}" alt="{{$car->trim}}" class="img-responsive">
         @endif
       </figure>
       <div class="caption">
