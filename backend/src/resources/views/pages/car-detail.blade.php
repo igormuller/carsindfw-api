@@ -24,7 +24,7 @@
               <ul class="slides">
                 @foreach ($car->gallery as $carImage)
                 <li>
-                  <img src="{{Storage::url($carImage->path)}}" alt="{{$carImage->name}}" class="img-responsive">
+                  <img src="{{Storage::disk('s3')->url($carImage->path)}}" alt="{{$carImage->name}}" class="img-responsive">
                 </li>
                 @endforeach
               </ul>
@@ -33,7 +33,7 @@
               <ul class="slides">
                 @foreach ($car->gallery as $carImage)
                 <li>
-                  <img src="{{Storage::url($carImage->path)}}" alt="{{$carImage->name}}" class="img-responsive">
+                  <img src="{{Storage::disk('s3')->url($carImage->path)}}" alt="{{$carImage->name}}" class="img-responsive">
                 </li>
                 @endforeach
               </ul>
