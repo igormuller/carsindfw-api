@@ -69,7 +69,7 @@ class SiteController extends Controller
     public function carDetail(Advertisement $car)
     {
         $relateds = Advertisement::where('id', '<>', $car->id)->where('car_model_id', $car->car_model_id)->limit(4)->get();
-    
+
         return view('pages.car-detail', ['car'=>$car, 'relateds'=>$relateds]);
     }
 
@@ -131,7 +131,7 @@ class SiteController extends Controller
         for ($i = $year->maxYear; $i >= $year->minYear; $i--) {
             $listYears[] = (int)$i;
         }
-        
+
         return response()->json($listYears);
     }
 
@@ -232,7 +232,7 @@ class SiteController extends Controller
 
     public function contact(Request $request)
     {
-        return view('pages.contact', []);
+        return view('pages.contact', ['success' => false]);
     }
 
     public function dealerPlan(Request $request)

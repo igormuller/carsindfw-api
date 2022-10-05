@@ -12,7 +12,6 @@
     <div class="container card-person-plan ">
         <div class="section-heading">
             <div class="row g-xl-5 mt-n1-9">
-                
                 <div class="col-md-4 col-lg-4 mt-1-9">
                     <div class="card card-style2 border-radius-10">
                         <div class="card-header">
@@ -36,10 +35,12 @@
                 <div class="col-md-8 col-lg-8 mt-1-9">
                     <div class="">
                         <div class="card-person-plan-title">
-                            <span class=""">Person Plan</span>
+                            <span class="">Person Plan</span>
                         </div>
                         <h4>Join us and sell your car! Request an account filling below</h4>
-                        <form class="contact quform" action="quform/contact.php" method="post" enctype="multipart/form-data" onclick="">
+                        <form class="contact quform" action="{{route('new-company')}}" method="post" enctype="multipart/form-data" onclick="">
+                            @csrf
+                            <input type="hidden" name="plan_type_id" value="8">
                             <div class="quform-elements">
                                 <div class="row">
                                     <!-- Begin Text input element -->
@@ -63,7 +64,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User ZIP <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_zip" type="text" name="user_zip" placeholder="Dealership ZIP" />
+                                                <input class="form-control" id="user_zip" type="text" name="zipcode" placeholder="Dealership ZIP" />
                                             </div>
                                         </div>
                                     </div>
@@ -71,7 +72,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_password" type="text" name="user_password" placeholder="User Password" />
+                                                <input class="form-control" id="user_password" type="text" name="password" placeholder="User Password" />
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +80,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Repeat Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_repeat_password" type="text" name="user_repeat_password" placeholder="Repeat User Password" />
+                                                <input class="form-control" id="user_repeat_password" type="text" name="re_password" placeholder="Repeat User Password" />
                                             </div>
                                         </div>
                                     </div>
@@ -98,11 +99,9 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
-        
     </div>
 </section>
 

@@ -73,6 +73,5 @@ Route::middleware(['auth:api','verified'])->group(function () {
             'users'          => 'UserController',
         ]
     );
-    
 });
 */

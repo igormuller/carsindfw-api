@@ -30,7 +30,7 @@ class StartCompanyService
     public function createWithUser(Array $data): Company
     {
         $type = PlanType::findOrFail($data['plan_type_id']);
-
+        $data['type'] = $type->company_type;
         if ($type->company_type === 'person') {
             $company = $this->createPerson($data);
         }

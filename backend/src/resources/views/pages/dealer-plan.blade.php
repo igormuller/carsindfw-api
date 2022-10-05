@@ -39,10 +39,26 @@
 
                     <div class="">
                         <div class="card-dealer-plan-title">
-                            <span class=""">Dealer Plan</span>
+                            <span class="">Dealer Plan</span>
                         </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
                         <h4>Join us and became a dealer! Request an account filling below</h4>
-                        <form class="contact quform" action="" method="post" enctype="multipart/form-data" onclick="">
+                        <form class="contact quform" action="{{route('new-company')}}" method="post" enctype="multipart/form-data" onclick="">
+                            @csrf
+                            <input type="hidden" name="plan_type_id" value="7">
                             <div class="quform-elements">
                                 <div class="row">
                                     <!-- Begin Text input element -->
@@ -50,7 +66,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Dealership Name <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="dealership_name" type="text" name="dealership_name" placeholder="Dealership Name" />
+                                                <input class="form-control" id="dealership_name" type="text" name="name" placeholder="Dealership Name" value="{{ old('name') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -58,7 +74,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Dealership Phone <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="dealership_phone" type="text" name="dealership_phone" placeholder="Dealership Phone " />
+                                                <input class="form-control" id="dealership_phone" type="text" name="phone" placeholder="Dealership Phone" value="{{ old('phone') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -66,7 +82,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Dealership ZIP <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="dealership_zip" type="text" name="dealership_zip" placeholder="Dealership ZIP" />
+                                                <input class="form-control" id="dealership_zip" type="text" name="zipcode" placeholder="Dealership ZIP" value="{{ old('zipcode') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +94,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User Name <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_name" type="text" name="user_name" placeholder="User Name" />
+                                                <input class="form-control" id="user_name" type="text" name="user_name" placeholder="User Name" value="{{ old('user_name') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +102,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User E-Mail <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_email" type="text" name="user_email" placeholder="User E-mail " />
+                                                <input class="form-control" id="user_email" type="text" name="user_email" placeholder="User E-mail" value="{{ old('user_email') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +110,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_password" type="text" name="user_password" placeholder="User Password" />
+                                                <input class="form-control" id="user_password" type="password" name="password" placeholder="User Password" />
                                             </div>
                                         </div>
                                     </div>
@@ -102,20 +118,20 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Repeat Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_repeat_password" type="text" name="user_repeat_password" placeholder="Repeat User Password" />
+                                                <input class="form-control" id="user_repeat_password" type="password" name="re_password" placeholder="Repeat User Password" />
                                             </div>
                                         </div>
                                     </div>
                                     <!-- End Text input element -->
                                 </div>
-    
+
                                 <div class="row">
                                     <!-- Begin Text input element -->
                                     <div class="col-md-3">
                                         <div class="quform-element form-group">
                                             <label for="name">Card Number <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_card_number" type="text" name="user_card_number" placeholder="User Card Number" />
+                                                <input class="form-control" id="user_card_number" type="text" name="card_number" placeholder="User Card Number" value="{{ old('card_number') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +139,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Card Holder <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_card_holder" type="text" name="user_card_holder" placeholder="User Card Holder" />
+                                                <input class="form-control" id="user_card_holder" type="text" name="card_name" placeholder="User Card Holder" value="{{ old('card_name') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -131,7 +147,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Expiration Date <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_card_expiration" type="text" name="user_card_expiration" placeholder="User Card Expiration" />
+                                                <input class="form-control" id="user_card_expiration" type="text" name="card_expiration_date" placeholder="User Card Expiration" value="{{ old('card_expiration_date') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -139,13 +155,13 @@
                                         <div class="quform-element form-group">
                                             <label for="name">CVV <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_card_cvv" type="text" name="user_card_cvv" placeholder="User Card CVV" />
+                                                <input class="form-control" id="user_card_cvv" type="text" name="card_cvv" placeholder="User Card CVV" value="{{ old('card_cvv') }}" />
                                             </div>
                                         </div>
                                     </div>
                                     <!-- End Text input element -->
                                 </div>
-                                
+
                                 <div class="row">
                                     <!-- Begin Submit button -->
                                     <div class="col-md-12">
@@ -159,11 +175,9 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
-     
     </div>
 </section>
 

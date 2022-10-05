@@ -4,10 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteController;
 
-Route::get('/', function () {
-    return "All right reserved to Cars In DFW -- API";
-});
-
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 
@@ -29,6 +25,7 @@ Route::get('/dealer-plan', [SiteController::class, 'dealerPlan'])->name('dealer-
 Route::get('/person-plan', [SiteController::class, 'personPlan'])->name('person-plan');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 Route::post('contact-us', 'ContactUsController@contact')->name('contact-post');
+Route::post('new-company', 'CompanyController@start')->name('new-company');
 
 Route::post('search-makes', [SiteController::class, 'searchMakes'])->name('search-makes');
 Route::post('search-models', [SiteController::class, 'searchModels'])->name('search-models');

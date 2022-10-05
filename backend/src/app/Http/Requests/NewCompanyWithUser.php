@@ -14,7 +14,7 @@ class NewCompanyWithUser extends FormRequest
     public function rules()
     {
         $rules = [
-            'type'                 => 'required|in:person,dealer,broker',
+//            'type'                 => 'required|in:person,dealer,broker',
             'user_name'            => 'required|string',
             'user_email'           => 'required|unique:users,email|email',
             'password'             => 'required|min:6',

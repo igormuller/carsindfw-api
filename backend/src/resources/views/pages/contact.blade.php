@@ -8,9 +8,15 @@
             <div class="col-lg-7">
                 <div class="">
                     <div class="title1">
-                    <h1 class="">Get In Touch</h1>
+                        <h1 class="">Get In Touch</h1>
                     </div>
+                    @if($success)
+                        <div class="text-center">
+                            <h3>Contact sent successfully!!!</h3>
+                        </div>
+                    @endif
                     <form class="contact quform" action="{{route('contact-post')}}" method="post" enctype="multipart/form-data" onclick="">
+                        @csrf
                         <div class="quform-elements">
                             <div class="row">
 
@@ -114,7 +120,7 @@
                             <address class="text-white d-block mb-0 w-md-80 w-xl-70">777 FAIRWAY Dr Coppell, Dallas TX 75006</address>
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
         </div>

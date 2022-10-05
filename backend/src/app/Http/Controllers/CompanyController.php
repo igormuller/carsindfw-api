@@ -21,10 +21,10 @@ class CompanyController extends Controller
     public function start(NewCompanyWithUser $request, StartCompanyService $service)
     {
         try {
-            $company = $service->createWithUser($request->all());
-            return response('Company created success!' . $company->id);
+            $service->createWithUser($request->all());
+            return redirect('dealer-plan')->with('message', 'Register with success!!');
         } catch (CardException $e) {
-            return response(['message' => $e->getMessage()], 402);
+            return redirect('dealer-plan')->withErrors([$e->getMessage()])->withInput();
         }
     }
 
