@@ -37,6 +37,20 @@
                         <div class="card-person-plan-title">
                             <span class="">Person Plan</span>
                         </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
                         <h4>Join us and sell your car! Request an account filling below</h4>
                         <form class="contact quform" action="{{route('new-company')}}" method="post" enctype="multipart/form-data" onclick="">
                             @csrf
@@ -48,7 +62,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User Name <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_name" type="text" name="user_name" placeholder="User Name" />
+                                                <input class="form-control" id="user_name" type="text" name="user_name" placeholder="User Name" value="{{ old('name') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -56,7 +70,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User E-Mail <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_email" type="text" name="user_email" placeholder="User E-mail " />
+                                                <input class="form-control" id="user_email" type="text" name="user_email" placeholder="User E-mail" value="{{ old('user_email') }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -64,7 +78,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">User ZIP <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_zip" type="text" name="zipcode" placeholder="Dealership ZIP" />
+                                                <input class="form-control" id="user_zip" type="text" name="zipcode" placeholder="Dealership ZIP" value="{{ old('zipcode') }}" />
                                             </div>
                                         </div>
                                     </div>
