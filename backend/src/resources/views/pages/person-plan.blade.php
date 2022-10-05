@@ -72,7 +72,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_password" type="text" name="password" placeholder="User Password" />
+                                                <input class="form-control" id="user_password" type="password" name="password" placeholder="User Password" />
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                         <div class="quform-element form-group">
                                             <label for="name">Repeat Password <span class="quform-required">*</span></label>
                                             <div class="quform-input">
-                                                <input class="form-control" id="user_repeat_password" type="text" name="re_password" placeholder="Repeat User Password" />
+                                                <input class="form-control" id="user_repeat_password" type="password" name="re_password" placeholder="Repeat User Password" />
                                             </div>
                                         </div>
                                     </div>
