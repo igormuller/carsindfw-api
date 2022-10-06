@@ -26,6 +26,14 @@
                   </div>
                 </div>
               </li>
+              <li class="nav2">
+                <img src="images/slide01.png" alt="" class="img">
+                <div class="caption">
+                  <div class="container">
+                    <div class="txt1"><span>SELL YOUR CAR 100% ONLINE</span></div>
+                  </div>
+                </div>
+              </li>
             </ul>
             <nav class="slides-navigation">
               <a href="#" class="next" title="Cars in DFW - Próximo Slide"></a>
