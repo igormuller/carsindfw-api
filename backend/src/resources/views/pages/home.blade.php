@@ -5,7 +5,7 @@
         <div id="slides_wrapper" class="">
           <div id="slides">
             <ul class="slides-container">
-              <li class="nav1">
+              {{-- <li class="nav1">
                 <img src="images/slide03.jpg" alt="" class="img">
                 <div class="caption">
                   <div class="container">
@@ -25,12 +25,37 @@
                     <div class="link2"><a href="details.html" class="slider-link2"><span>SEE DETAILS</span></a></div>
                   </div>
                 </div>
-              </li>
+              </li> --}}
               <li class="nav2">
                 <img src="images/slide01.png" alt="" class="img">
                 <div class="caption">
                   <div class="container">
-                    <div class="txt1"><span>SELL YOUR CAR 100% ONLINE</span></div>
+                    <div class="txt2"><span>SELL YOUR CAR 100% ONLINE</span></div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav2">
+                <img src="images/slide02.png" alt="" class="img">
+                <div class="caption">
+                  <div class="container">
+                    <div class="txt1"><span>NOT A DEALER, BUT INTERESTED IN ADVERTISING</span></div>
+                    <div class="txt2"><span>ON CARS IN DFW</span></div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav2">
+                <img src="images/slide03.png" alt="" class="img">
+                <div class="caption">
+                  <div class="container">
+                    <div class="txt2"><span>GET YOUR CARS IN FRONT OF THE MOST READY TO BUY SHOPPERS</span></div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav2">
+                <img src="images/slide04.png" alt="" class="img">
+                <div class="caption">
+                  <div class="container">
+                    <div class="txt2"><span>FIND CARS FOR SALE, LOCAL DEALERS, AND ADVICE</span></div>
                   </div>
                 </div>
               </li>
