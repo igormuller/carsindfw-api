@@ -28,7 +28,7 @@
         <div class="txt5">{{$car->miles}} Miles</div>
         <div class="bot-info clearfix">
           <div class="info2">
-            <div class="txt6">${{$car->value}}</div>
+            <div class="txt6">${{number_format($car->value, 0)}}</div>
           </div>
           <div class="info3">
             <div class="txt7">
