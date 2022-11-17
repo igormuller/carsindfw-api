@@ -54,14 +54,14 @@
             <div class="d-flex justify-content-center">
                 <div class="text-center mx-5">
                     <div class="v-avatar" style="min-width: 150px; width: 150px;">
-                        <img src="{{ url('images/tiago_back.jpg')}}" />
+                        <img src="{{ url('images/about/tiago_back.jpg')}}" />
                         <h3 class="font-weight-bold mt-2" >Tiago Back</h3>
                         <h4 class="font-weight-bold mt-n5" >Owner</h4>
                     </div>
                 </div>
                 <div class="text-center mx-5">
                     <div class="v-avatar" style="min-width: 150px; width: 150px;">
-                        <img src="{{ url('images/lilian.jpeg')}}" />
+                        <img src="{{ url('images/about/lilian.jpeg')}}" />
                         <h3 class="font-weight-bold mt-2" > Lilian Müller </h3>
                         <h4 class="font-weight-bold mt-n5" >Owner</h4>
                     </div>
@@ -70,14 +70,14 @@
             <div class="d-flex justify-content-center">
                 <div class="text-center mx-10">
                     <div class="v-avatar" style="min-width: 150px; width: 150px;">
-                        <img src="{{ url('images/igor_muller.jpeg')}}" />
+                        <img src="{{ url('images/about/igor_muller.jpeg')}}" />
                         <h3 class="font-weight-bold mt-2"> Igor Müller </h3>
                         <h4 class="font-weight-bold mt-n5"> Developer Manager </h4>
                     </div>
                 </div>
                 <div class="text-center mx-10">
                     <div class="v-avatar" style="min-width: 150px; width: 150px;">
-                        <img src="{{ url('images/davi.jpeg')}}" />
+                        <img src="{{ url('images/about/davi.jpeg')}}" />
                         <h3 class="font-weight-bold mt-2"> Davi </h3>
                         <h4 class="font-weight-bold mt-n5"> Marketing </h4>
                     </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="text-center mx-10">
                     <div class="v-avatar" style="min-width: 150px; width: 150px;">
-                        <img src="{{ url('images/renato.jpeg')}}" />
+                        <img src="{{ url('images/about/renato.jpeg')}}" />
                         <h3 class="font-weight-bold mt-2"> Renato </h3>
                         <h4 class="font-weight-bold mt-n5"> Graphic Designer / Social Media </h4>
                     </div>
@@ -103,7 +103,7 @@
   <div class="container-fluid">
       <div class="row g-0">
           <div class="col-lg-12 bg-img cover-background theme-overlay" data-overlay-dark="5">
-              <img src="https://carsindfw.com/img/gif_cars_in_dallas_at_night.f8af9cfc.gif">
+              <img src="{{ url('images/gif_cars_in_dallas_at_night.gif')}}">
               <div class="p-1-9 p-lg-2-9 position-relative z-index-1 h-100">
                   <h2 class="pt-6 mb-3 text-white">Our Contact Detail</h2>
                   <p class="mb-5 text-white display-sm-28">Need any consultations contact with us</p>
