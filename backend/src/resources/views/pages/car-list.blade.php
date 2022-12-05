@@ -63,7 +63,7 @@
         <figure><img src="images/banner.jpg" alt="" class="img-responsive"></figure>
         <div class="caption">
           <div class="txt1">SELL YOUR CAR</div>
-          <div class="txt2">Nam tellus enimds eleifend dignis lsim biben edum tristique sed metus fusce Maecenas lobortis.</div>
+          <div class="txt2">The best place to advertise your car in the Dallas Fort Worth area.</div>
           <div class="txt3"><a href="{{route('person-plan')}}" class="btn-default btn2">REGISTER NOW</a></div>
         </div>
       </div>
